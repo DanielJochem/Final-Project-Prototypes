@@ -10,19 +10,16 @@ public class UITile : MonoBehaviour {
     [SerializeField]
     private Sprite swapSprite;
 
-    [SerializeField]
-    private Sprite placeSprite;
+    public Sprite placeSprite;
 
     //Swap Variables
     private TileSwapper tileSwapper;
 
     //Place Variables
-    private TilePlacer tilePlacer;
-    private GameObject selectedTile;
+    public TilePlacer tilePlacer;
 
     void Awake() {
         tileSwapper = FindObjectOfType<TileSwapper>();
-        tilePlacer = FindObjectOfType<TilePlacer>();
     }
 
     void Update() {
