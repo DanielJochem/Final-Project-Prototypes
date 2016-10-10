@@ -13,7 +13,6 @@ public class ChooseTile : MonoBehaviour {
     public InputField levelNameIF;
 
     void Awake () {
-        //m_keyText = GetComponent<Text>();
         EventManager.AddListener<KeyPressedEvent>(OnKeyPressed);
 	}
     
