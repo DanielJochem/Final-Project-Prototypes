@@ -19,7 +19,7 @@ public class CameraBehaviour : MonoBehaviour {
     public float cameraHeightIncrement;
     private float cameraHeightMin = 20;
     private float cameraHeightMax = 0;
-    
+
     // Use this for initialization
     void Start() {
         cameraPos = transform.position;
@@ -36,8 +36,13 @@ public class CameraBehaviour : MonoBehaviour {
             if(cameraHeightCurrent < cameraHeightMin)
                 cameraHeightCurrent = cameraHeightMin;
 
-            if(cameraHeightCurrent > cameraHeightMax)
+            if(cameraHeightCurrent > cameraHeightMax) {
                 cameraHeightCurrent = cameraHeightMax;
+
+                //Move the camera a little bit so that the fully zoomed out level is centered! (Makes things beautifully centered).
+                cameraPos.y = (sizeByXY == "X") ? -(tilePlacer.xTiles / 8) : -(tilePlacer.yTiles / 4);
+                transform.position = cameraPos;
+            }
 
             cameraMovementSpeed = cameraHeightCurrent * 2;
         }
@@ -78,28 +83,30 @@ public class CameraBehaviour : MonoBehaviour {
         } else if(Input.GetAxis("Mouse ScrollWheel") < 0 && cameraHeightCurrent < cameraHeightMax) {
             cameraHeightCurrent += cameraHeightIncrement;
         }
-        
+
         Camera.main.orthographicSize = cameraHeightCurrent;
     }
 
     //Move Camera using mouse
     void moveCamera() {
-        cameraMovementSpeed = invertMovement ? -Mathf.Abs(cameraMovementSpeed) : Mathf.Abs(cameraMovementSpeed);
+        if(!FindObjectOfType<TilePlacer>().levelNameIF.isFocused) {
+            cameraMovementSpeed = invertMovement ? -Mathf.Abs(cameraMovementSpeed) : Mathf.Abs(cameraMovementSpeed);
 
-        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
-            transform.Translate(Vector2.right * cameraMovementSpeed * Time.deltaTime);
-        }
+            if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
+                transform.Translate(Vector2.right * cameraMovementSpeed * Time.deltaTime);
+            }
 
-        if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
-            transform.Translate(Vector2.right * -cameraMovementSpeed * Time.deltaTime);
-        }
+            if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) {
+                transform.Translate(Vector2.right * -cameraMovementSpeed * Time.deltaTime);
+            }
 
-        if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
-            transform.Translate(transform.up * cameraMovementSpeed * Time.deltaTime);
-        }
+            if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
+                transform.Translate(transform.up * cameraMovementSpeed * Time.deltaTime);
+            }
 
-        if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
-            transform.Translate(transform.up * -cameraMovementSpeed * Time.deltaTime);
+            if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
+                transform.Translate(transform.up * -cameraMovementSpeed * Time.deltaTime);
+            }
         }
     }
 

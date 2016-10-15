@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Text;
 
 public class TilePlacer : MonoBehaviour {
 
     public GameObject selectedTile, placementTile;
+    public Sprite selectedTileSprite, placementTileSprite, voidTileSprite;
     public GameObject backdrop; /**/
+    private GameObject playerTilePlaced;
     public int tileSize;
+    public List<GameObject> tiles;
 
-    private bool levelLoaded;
+    [SerializeField]
+    private Text FileExistsText;
+
+    private bool levelLoaded, canSave;
 
     public InputField xTilesIF, yTilesIF, levelNameIF;
     public EventSystem eventSystem;
@@ -30,10 +37,6 @@ public class TilePlacer : MonoBehaviour {
     }
     
 	void Update () {
-        //For placing tiles
-        if(selectedTile != null) {
-
-        }
 
         //Switching between the X and Y amount input fields at the start of the game.
         if(Input.GetKeyDown(KeyCode.Tab)) {
@@ -60,13 +63,9 @@ public class TilePlacer : MonoBehaviour {
                         GameObject tempObj;
                         tempObj = Instantiate(placementTile, currPos, Quaternion.Euler(270.0f, 0.0f, 0.0f));
 
-                        //Gross scaling stuff
-                        Vector3 scaleLocal = tempObj.transform.localScale;
-                        scaleLocal.z *= 2;
-                        scaleLocal /= 2;
-                        tempObj.transform.localScale = scaleLocal;
-                        //Eww, glad that is over!
-                        
+                        tiles.Add(tempObj);
+                        tempObj.transform.GetChild(0).GetComponent<PlacementTileListNumber>().listNum = tiles.Count;
+
                         //Next X position
                         currPos.x += tileSize;
                     }
@@ -92,6 +91,19 @@ public class TilePlacer : MonoBehaviour {
         }
 	}
 
+    void EnableFileExistsText() {
+        FileExistsText.gameObject.SetActive(true);
+    }
+
+    public void OverrideFileExists() {
+        DisableFileExistsText();
+        SaveLevel();
+    }
+
+    public void DisableFileExistsText() {
+        FileExistsText.gameObject.SetActive(false);
+    }
+
     public void SetXTiles(InputField inputField) {
         xTiles = int.Parse(inputField.text);
     }
@@ -104,11 +116,57 @@ public class TilePlacer : MonoBehaviour {
         levelName = inputField.text;
     }
 
+    public void OnTileClicked(GameObject tile) {
+        if(selectedTile != null) {
+            if(selectedTile.name == "Player") {
+                //If there is already a Player tile somewhere on the gid of tiles, get rid of it.
+                if(playerTilePlaced != null) {
+                    playerTilePlaced.GetComponent<SpriteRenderer>().sprite = placementTileSprite;
+                    playerTilePlaced.GetComponent<PlacementTileListNumber>().isBlank = true;
+                }
+
+                //If you are clicking on the same tile as there is already a Player tile on, you obviously want to get rid of it.
+                if(playerTilePlaced == tile) {
+                    playerTilePlaced.GetComponent<SpriteRenderer>().sprite = placementTileSprite;
+                    playerTilePlaced.GetComponent<PlacementTileListNumber>().isBlank = true;
+                    playerTilePlaced = null;
+                } else {
+                    //Place the Player tile here
+                    tile.GetComponent<SpriteRenderer>().sprite = selectedTileSprite;
+                    tile.GetComponent<PlacementTileListNumber>().isBlank = false;
+                    playerTilePlaced = tile;
+                }
+
+            } else {
+                //Don't worry about the Player tile logic, just place the selected tile here.
+                if(tile.GetComponent<SpriteRenderer>().sprite == selectedTileSprite) {
+                    tile.GetComponent<SpriteRenderer>().sprite = placementTileSprite;
+                    tile.GetComponent<PlacementTileListNumber>().isBlank = true;
+                } else {
+                    tile.GetComponent<SpriteRenderer>().sprite = selectedTileSprite;
+                    tile.GetComponent<PlacementTileListNumber>().isBlank = false;
+                }
+            }
+        }
+    }
+
+    public void GetRidOfSelectedTile() {
+        //Just some safety for if the save button is just about to be pressed, as we don'w want to place a sneaky, un-wanted tile before it saves to CSV.
+        selectedTile = null;
+        selectedTileSprite = null;
+    }
+
     public void TestForErrorOnSave() {
         //if there are places that havent been filled with void
+        for(int i = 0; i < tiles.Count; ++i) {
+            if(tiles[i].transform.GetChild(0).GetComponent<PlacementTileListNumber>().isBlank) {
+                saveErrorArray.Add("not all tiles have an object, try doing a Void Fill");
+                break;
+            }
+        }
 
         if(levelNameIF.text.Length == 0) {
-            saveErrorArray.Add("there is no input for Level Name");
+            saveErrorArray.Add("and there is no input for Level Name");
         }
 
         if(xTilesIF.text.Length == 0 && yTilesIF.text.Length == 0) {
@@ -149,7 +207,41 @@ public class TilePlacer : MonoBehaviour {
             Debug.Log("Can not save because " + joined + ".");
             saveErrorArray.Clear();
         } else {
-            Debug.Log("Saved Successfully!");
+            if(System.IO.File.Exists(Application.dataPath + "/Saved Levels/" + levelName + ".csv")) {
+                EnableFileExistsText();
+            } else {
+                //Can Save!
+                SaveLevel();
+            }
+        }
+    }
+
+    void SaveLevel() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.Append(levelName).Append(", ");
+        stringBuilder.Append(xTiles).Append(", ");
+        stringBuilder.Append(yTiles).Append(", ");
+        stringBuilder.AppendLine();
+
+        for(int i = 0; i < tiles.Count; ++i) {
+            stringBuilder.Append(tiles[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name).Append(", ");
+
+            if((i + 1) % xTiles == 0) {
+                stringBuilder.AppendLine();
+            }
+        }
+
+        System.IO.File.WriteAllText(Application.dataPath + "/Saved Levels/" + levelName + ".csv", stringBuilder.ToString());
+        Debug.Log("Saved Successfully!");
+    }
+
+    public void VoidFillLevel() {
+        for(int i = 0; i < tiles.Count; ++i) {
+            if(tiles[i].transform.GetChild(0).GetComponent<PlacementTileListNumber>().isBlank) {
+                tiles[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = voidTileSprite;
+                tiles[i].transform.GetChild(0).GetComponent<PlacementTileListNumber>().isBlank = false;
+            }
         }
     }
 }

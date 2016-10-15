@@ -36,7 +36,7 @@ public class UITile : MonoBehaviour {
 
     public void OnTileClick() {
         //Swapping
-        if(Input.GetKey(KeyCode.LeftControl)) { 
+        if(Input.GetKey(KeyCode.LeftShift)) { 
             gameObject.transform.parent.gameObject.GetComponent<Image>().sprite = swapSprite;
             tileSwapper.ToSwap(gameObject);
 
@@ -44,6 +44,7 @@ public class UITile : MonoBehaviour {
         } else { 
             gameObject.transform.parent.gameObject.GetComponent<Image>().sprite = placeSprite;
             tilePlacer.selectedTile = gameObject;
+            tilePlacer.selectedTileSprite = gameObject.GetComponent<Image>().sprite;
         }
     }
 
