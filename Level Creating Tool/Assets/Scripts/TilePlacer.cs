@@ -15,7 +15,10 @@ public class TilePlacer : MonoBehaviour {
     public List<GameObject> tiles;
 
     [SerializeField]
-    private Text FileExistsText;
+    private Text fileExistsText;
+
+    [SerializeField]
+    private Text saveErrorText;
 
     private bool levelLoaded, canSave;
 
@@ -91,8 +94,16 @@ public class TilePlacer : MonoBehaviour {
         }
 	}
 
+    void EnableSaveErrorText() {
+        saveErrorText.gameObject.SetActive(true);
+    }
+
+    public void DisableSaveErrorText() {
+        saveErrorText.gameObject.SetActive(false);
+    }
+
     void EnableFileExistsText() {
-        FileExistsText.gameObject.SetActive(true);
+        fileExistsText.gameObject.SetActive(true);
     }
 
     public void OverrideFileExists() {
@@ -101,7 +112,7 @@ public class TilePlacer : MonoBehaviour {
     }
 
     public void DisableFileExistsText() {
-        FileExistsText.gameObject.SetActive(false);
+        fileExistsText.gameObject.SetActive(false);
     }
 
     public void SetXTiles(InputField inputField) {
@@ -157,55 +168,51 @@ public class TilePlacer : MonoBehaviour {
     }
 
     public void TestForErrorOnSave() {
+        StringBuilder saveCheckSB = new StringBuilder();
+
         //if there are places that havent been filled with void
         for(int i = 0; i < tiles.Count; ++i) {
             if(tiles[i].transform.GetChild(0).GetComponent<PlacementTileListNumber>().isBlank) {
-                saveErrorArray.Add("not all tiles have an object, try doing a Void Fill");
+                saveCheckSB.Append("Not all tiles have an object, try doing a Void Fill.").AppendLine();
                 break;
             }
         }
 
         if(levelNameIF.text.Length == 0) {
-            saveErrorArray.Add("and there is no input for Level Name");
+            saveCheckSB.Append("There is no input for Level Name.").AppendLine();
         }
 
         if(xTilesIF.text.Length == 0 && yTilesIF.text.Length == 0) {
-            saveErrorArray.Add(saveErrorArray.Count > 0 ? "and there are no inputs for both X Amount and Y Amount" : "there are no inputs for both X Amount and Y Amount");
+            saveCheckSB.Append("There are no inputs for both X Amount and Y Amount.").AppendLine();
 
         } else if(int.Parse(xTilesIF.text) <= 0 && int.Parse(yTilesIF.text) <= 0) {
-            saveErrorArray.Add("both X Amount and Y Amount are less than or equal to 0");
+            saveCheckSB.Append("Both X Amount and Y Amount are less than or equal to 0.").AppendLine();
 
         } else {
             if(xTilesIF.text.Length == 0) {
-                saveErrorArray.Add(saveErrorArray.Count > 0 ? "or" : "there is no input for");
-                saveErrorArray.Add("X Amount");
+                saveCheckSB.Append("There is no input for X Amount.").AppendLine();
 
             } else if(int.Parse(xTilesIF.text) <= 0) {
-                if(saveErrorArray.Count > 0) {
-                    saveErrorArray.Add("and");
-                }
-
-                saveErrorArray.Add("X Amount is less than or equal to 0");
+                saveCheckSB.Append("X Amount is less than or equal to 0.").AppendLine();
             }
 
             if(yTilesIF.text.Length == 0) {
-                //Yep... definitely addicted to ternary operators.
-                saveErrorArray.Add(int.Parse(xTilesIF.text) <= 0 ? "and there is no input for" : saveErrorArray.Count > 0 ? "or" : "there is no input for");
-                saveErrorArray.Add("Y Amount");
+                saveCheckSB.Append("There is no input for Y AMount.").AppendLine();
 
             } else if(int.Parse(yTilesIF.text) <= 0) {
-                if(saveErrorArray.Count > 0) {
-                    saveErrorArray.Add("and");
-                }
+                saveCheckSB.Append("Y Amount is less than or equal to 0.").AppendLine();
+            }
 
-                saveErrorArray.Add("Y Amount is less than or equal to 0");
+            if(playerTilePlaced == null) {
+                saveCheckSB.Append("There is no Player tile placed on the grid.").AppendLine();
             }
         }
 
-        if(saveErrorArray.Count > 0) {
-            string joined = string.Join(" ", saveErrorArray.ToArray());
-            Debug.Log("Can not save because " + joined + ".");
-            saveErrorArray.Clear();
+        if(saveCheckSB.Length > 0) {
+            saveCheckSB.Remove(saveCheckSB.Length - 1, 1);
+            saveErrorText.text = "Can not save because:\n" + saveCheckSB.ToString();
+            EnableSaveErrorText();
+            saveCheckSB.Remove(0, saveCheckSB.Length - 1);
         } else {
             if(System.IO.File.Exists(Application.dataPath + "/Saved Levels/" + levelName + ".csv")) {
                 EnableFileExistsText();
@@ -217,22 +224,22 @@ public class TilePlacer : MonoBehaviour {
     }
 
     void SaveLevel() {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder saveSB = new StringBuilder();
 
-        stringBuilder.Append(levelName).Append(", ");
-        stringBuilder.Append(xTiles).Append(", ");
-        stringBuilder.Append(yTiles).Append(", ");
-        stringBuilder.AppendLine();
+        saveSB.Append(levelName).Append(", ");
+        saveSB.Append(xTiles).Append(", ");
+        saveSB.Append(yTiles).Append(", ");
+        saveSB.AppendLine();
 
         for(int i = 0; i < tiles.Count; ++i) {
-            stringBuilder.Append(tiles[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name).Append(", ");
+            saveSB.Append(tiles[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name).Append(", ");
 
             if((i + 1) % xTiles == 0) {
-                stringBuilder.AppendLine();
+                saveSB.AppendLine();
             }
         }
 
-        System.IO.File.WriteAllText(Application.dataPath + "/Saved Levels/" + levelName + ".csv", stringBuilder.ToString());
+        System.IO.File.WriteAllText(Application.dataPath + "/Saved Levels/" + levelName + ".csv", saveSB.ToString());
         Debug.Log("Saved Successfully!");
     }
 
