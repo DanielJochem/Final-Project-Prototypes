@@ -90,7 +90,7 @@ public class CameraBehaviour : MonoBehaviour {
     //Move Camera using mouse
     void moveCamera() {
         if(!FindObjectOfType<TilePlacer>().levelNameIF.isFocused) {
-            cameraMovementSpeed = invertMovement ? -Mathf.Abs(cameraMovementSpeed) : Mathf.Abs(cameraMovementSpeed);
+            cameraMovementSpeed = invertMovement ? Mathf.Abs(cameraMovementSpeed) : -Mathf.Abs(cameraMovementSpeed);
 
             if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
                 transform.Translate(Vector2.right * cameraMovementSpeed * Time.deltaTime);
