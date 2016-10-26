@@ -25,6 +25,7 @@ public class ChooseTile : MonoBehaviour {
         if(!xTilesIF.isFocused && !yTilesIF.isFocused && !levelNameIF.isFocused) {
             switch(a_event.PressedKeyCode.ToString()) {
                 case "Alpha1":
+                case "Keypad1":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[0].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[0].transform.GetChild(0).gameObject);
@@ -35,6 +36,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Alpha2":
+                case "Keypad2":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[1].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[1].transform.GetChild(0).gameObject);
@@ -45,6 +47,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Alpha3":
+                case "Keypad3":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[2].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[2].transform.GetChild(0).gameObject);
@@ -55,6 +58,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Alpha4":
+                case "Keypad4":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[3].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[3].transform.GetChild(0).gameObject);
@@ -65,6 +69,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Alpha5":
+                case "Keypad5":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[4].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[4].transform.GetChild(0).gameObject);
@@ -75,6 +80,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Alpha6":
+                case "Keypad6":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[5].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[5].transform.GetChild(0).gameObject);
@@ -85,6 +91,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Alpha7":
+                case "Keypad7":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[6].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[6].transform.GetChild(0).gameObject);
@@ -95,6 +102,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Alpha8":
+                case "Keypad8":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[7].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[7].transform.GetChild(0).gameObject);
@@ -105,6 +113,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Alpha9":
+                case "Keypad9":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[8].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[8].transform.GetChild(0).gameObject);
@@ -115,6 +124,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Alpha0":
+                case "KeypadDivide":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[9].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[9].transform.GetChild(0).gameObject);
@@ -125,6 +135,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Minus":
+                case "KeypadMultiply":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[10].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[10].transform.GetChild(0).gameObject);
@@ -135,6 +146,7 @@ public class ChooseTile : MonoBehaviour {
                     }
                     break;
                 case "Equals":
+                case "KeypadMinus":
                     if(Input.GetKey(KeyCode.LeftShift)) {
                         UITiles[11].GetComponent<Image>().sprite = swapSprite;
                         tileSwapper.ToSwap(UITiles[11].transform.GetChild(0).gameObject);

@@ -40,7 +40,6 @@ public class TilePlacer : MonoBehaviour {
     }
     
 	void Update () {
-
         //Switching between the X and Y amount input fields at the start of the game.
         if(Input.GetKeyDown(KeyCode.Tab)) {
             //I think I am addicted to ternary operators...
@@ -150,9 +149,11 @@ public class TilePlacer : MonoBehaviour {
 
             } else {
                 //Don't worry about the Player tile logic, just place the selected tile here.
-                if(tile.GetComponent<SpriteRenderer>().sprite == selectedTileSprite) {
-                    tile.GetComponent<SpriteRenderer>().sprite = placementTileSprite;
-                    tile.GetComponent<PlacementTileListNumber>().isBlank = true;
+                if(Input.GetMouseButton(1)) {
+                    if(tile.GetComponent<SpriteRenderer>().sprite != placementTileSprite) {
+                        tile.GetComponent<SpriteRenderer>().sprite = placementTileSprite;
+                        tile.GetComponent<PlacementTileListNumber>().isBlank = true;
+                    }
                 } else {
                     tile.GetComponent<SpriteRenderer>().sprite = selectedTileSprite;
                     tile.GetComponent<PlacementTileListNumber>().isBlank = false;

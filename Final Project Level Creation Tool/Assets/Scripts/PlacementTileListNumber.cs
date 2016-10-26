@@ -12,7 +12,7 @@ public class PlacementTileListNumber : MonoBehaviour {
     }
 
     void OnMouseOver() {
-        if(Input.GetMouseButton(0) && !tileSet) {
+        if((Input.GetMouseButton(0) || Input.GetMouseButton(1)) && !tileSet) {
             tileSet = true;
             tilePlacer.OnTileClicked(gameObject);
         }
