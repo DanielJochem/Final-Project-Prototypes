@@ -8,7 +8,6 @@ public class KeyPressedEvent : GameEvent
 
     public KeyPressedEvent(KeyCode a_keyCodePressed)
     {
-        Debug.Log(a_keyCodePressed);
         PressedKeyCode = a_keyCodePressed;
     }
 }
