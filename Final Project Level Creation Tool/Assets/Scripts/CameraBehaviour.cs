@@ -8,7 +8,7 @@ public class CameraBehaviour : MonoBehaviour {
     private Vector3 cameraPos;
     private string sizeByXY;
 
-    private TilePlacer tilePlacer;
+    private UIRelatedStuff uiRelatedStuff;
 
     public float cameraMovementSpeed = 30.0f;
     public float cameraHeightCurrent;
@@ -24,12 +24,12 @@ public class CameraBehaviour : MonoBehaviour {
     void Start() {
         cameraPos = transform.position;
         cameraHeightCurrent = Camera.main.orthographicSize;
-        tilePlacer = FindObjectOfType<TilePlacer>();
+        uiRelatedStuff = FindObjectOfType<UIRelatedStuff>();
     }
 
     // Update is called once per frame
     void Update() {
-        if(tilePlacer.xySaved) {
+        if(uiRelatedStuff.xySaved) {
             moveCamera();
             cameraZooming();
 
@@ -40,7 +40,7 @@ public class CameraBehaviour : MonoBehaviour {
                 cameraHeightCurrent = cameraHeightMax;
 
                 //Move the camera a little bit so that the fully zoomed out level is centered! (Makes things beautifully centered).
-                cameraPos.y = (sizeByXY == "X") ? -(tilePlacer.xTiles / 8) : -(tilePlacer.yTiles / 4);
+                cameraPos.y = (sizeByXY == "X") ? -(uiRelatedStuff.xTiles / 8) : -(uiRelatedStuff.yTiles / 4);
                 transform.position = cameraPos;
             }
 
@@ -56,7 +56,7 @@ public class CameraBehaviour : MonoBehaviour {
             cameraHeightCurrent = cameraHeightMax;
 
             //Move the camera a little bit so that the zoomed out blank level is centered! (It looks beautiful, trust me).
-            cameraPos.y = (sizeByXY == "X") ? -(tilePlacer.xTiles / 8) : -(tilePlacer.yTiles / 4);
+            cameraPos.y = (sizeByXY == "X") ? -(uiRelatedStuff.xTiles / 8) : -(uiRelatedStuff.yTiles / 4);
             transform.position = cameraPos;
         }
 
@@ -75,7 +75,7 @@ public class CameraBehaviour : MonoBehaviour {
             }
         }
 
-        cameraHeightIncrement = cameraHeightCurrent / tilePlacer.tileSize;
+        cameraHeightIncrement = cameraHeightCurrent / uiRelatedStuff.tileSize;
 
         //Adjust Camera Height - Scrollwheel
         if(Input.GetAxis("Mouse ScrollWheel") > 0 && cameraHeightCurrent > cameraHeightMin) {
@@ -89,7 +89,7 @@ public class CameraBehaviour : MonoBehaviour {
 
     //Move Camera using mouse
     void moveCamera() {
-        if(!FindObjectOfType<TilePlacer>().levelNameIF.isFocused) {
+        if(!FindObjectOfType<UIRelatedStuff>().levelNameIF.isFocused) {
             cameraMovementSpeed = invertMovement ? Mathf.Abs(cameraMovementSpeed) : -Mathf.Abs(cameraMovementSpeed);
 
             if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
@@ -113,11 +113,11 @@ public class CameraBehaviour : MonoBehaviour {
     float SetZoomLimit() {
         float temp;
 
-        if(((float)tilePlacer.xTiles / (float)tilePlacer.yTiles) >= 2.5f) {
-            temp = tilePlacer.xTiles * 1.25f;
+        if(((float)uiRelatedStuff.xTiles / (float)uiRelatedStuff.yTiles) >= 2.5f) {
+            temp = uiRelatedStuff.xTiles * 1.25f;
             sizeByXY = "X";
         } else {
-            temp = tilePlacer.yTiles * 3.5f;
+            temp = uiRelatedStuff.yTiles * 3.5f;
             sizeByXY = "Y";
         }
         return temp;

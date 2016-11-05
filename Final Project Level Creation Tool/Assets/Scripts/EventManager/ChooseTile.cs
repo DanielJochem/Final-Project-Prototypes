@@ -4,10 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ChooseTile : MonoBehaviour {
-    public List<GameObject> UITiles;
-    public Sprite placeSprite, swapSprite;
     public TilePlacer tilePlacer;
     public TileSwapper tileSwapper;
+    public UIRelatedStuff uiRelatedStuff;
+
+    public List<GameObject> UITiles;
+    public Sprite placeSprite, swapSprite;
 
     public InputField xTilesIF;
     public InputField yTilesIF;
@@ -22,7 +24,7 @@ public class ChooseTile : MonoBehaviour {
     }
 
     void OnKeyPressed(KeyPressedEvent a_event) {
-        if(!xTilesIF.isFocused && !yTilesIF.isFocused && !levelNameIF.isFocused) {
+        if(uiRelatedStuff.xySaved && !uiRelatedStuff.levelNameIF.isFocused) {
             switch(a_event.PressedKeyCode.ToString()) {
                 case "Alpha1":
                 case "Keypad1":
