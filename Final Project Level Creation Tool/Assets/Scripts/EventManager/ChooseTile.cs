@@ -4,19 +4,19 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ChooseTile : MonoBehaviour {
-    public TilePlacer tilePlacer;
-    public TileSwapper tileSwapper;
-    public UIRelatedStuff uiRelatedStuff;
+    private TilePlacer tilePlacer;
+    private TileSwapper tileSwapper;
+    private UIRelatedStuff uiRelatedStuff;
 
     public List<GameObject> UITiles;
     public Sprite placeSprite, swapSprite;
 
-    public InputField xTilesIF;
-    public InputField yTilesIF;
-    public InputField levelNameIF;
-
     void Awake () {
         EventManager.AddListener<KeyPressedEvent>(OnKeyPressed);
+
+        tilePlacer = FindObjectOfType<TilePlacer>();
+        tileSwapper = FindObjectOfType<TileSwapper>();
+        uiRelatedStuff = FindObjectOfType<UIRelatedStuff>();
 	}
     
     void OnDestroy() {

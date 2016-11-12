@@ -4,22 +4,27 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UITile : MonoBehaviour {
+    //Swap Variables
+    private TileSwapper tileSwapper;
+
+    //Place Variables
+    private TilePlacer tilePlacer;
+
     [SerializeField]
     private Sprite baseSprite;
 
     [SerializeField]
     private Sprite swapSprite;
 
-    public Sprite placeSprite;
+    [SerializeField]
+    private Sprite placeSprite;
 
-    //Swap Variables
-    private TileSwapper tileSwapper;
-
-    //Place Variables
-    public TilePlacer tilePlacer;
+    [HideInInspector]
+    public GameObject tempTile;
 
     void Awake() {
         tileSwapper = FindObjectOfType<TileSwapper>();
+        tilePlacer = FindObjectOfType<TilePlacer>();
     }
 
     void Update() {
@@ -36,7 +41,11 @@ public class UITile : MonoBehaviour {
 
     public void OnTileClick() {
         //Swapping
-        if(Input.GetKey(KeyCode.LeftShift)) { 
+        if(Input.GetKey(KeyCode.LeftShift)) {
+            if(gameObject.transform.parent.gameObject.GetComponent<Image>().sprite == placeSprite) {
+                tempTile = tilePlacer.selectedTile;
+                tilePlacer.selectedTile = null;
+            }
             gameObject.transform.parent.gameObject.GetComponent<Image>().sprite = swapSprite;
             tileSwapper.ToSwap(gameObject);
 

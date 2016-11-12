@@ -2,8 +2,9 @@
 
 public class PlacementTileListNumber : MonoBehaviour {
     public int listNum;
-    private bool tileSet;
     public bool isBlank;
+
+    private bool tileSet;
     private TilePlacer tilePlacer;
 
     void Start() {

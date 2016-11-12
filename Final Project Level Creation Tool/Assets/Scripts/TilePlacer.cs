@@ -2,13 +2,17 @@
 using UnityEngine;
 
 public class TilePlacer : MonoBehaviour {
-
-    public GameObject selectedTile, placementTile;
-    public Sprite selectedTileSprite, placementTileSprite, voidTileSprite;
+    [HideInInspector]
+    public GameObject selectedTile;
+    [HideInInspector]
+    public Sprite selectedTileSprite;
 
     [HideInInspector]
     public GameObject playerTilePlaced;
 
+    public GameObject placementTile;
+    public Sprite placementTileSprite, voidTileSprite;
+    
     public void OnTileClicked(GameObject tile) {
         if(selectedTile != null) {
             if(selectedTile.name == "Player") {

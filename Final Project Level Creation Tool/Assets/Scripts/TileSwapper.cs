@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TileSwapper : MonoBehaviour {
-    public GameObject tileA;
-    public GameObject tileB;
-
-    private GameObject tileAParent;
-    private GameObject tileBParent;
+    public TilePlacer tilePlacer;
+    public UITile uiTile;
 
     public GameObject swapperTileA;
     public GameObject swapperTileB;
 
+    private GameObject tileA;
+    private GameObject tileB;
+
+    private GameObject tileAParent;
+    private GameObject tileBParent;
+    
     // Update is called once per frame
     void Update () {
         if(tileA != null && tileB != null) {
@@ -47,6 +50,8 @@ public class TileSwapper : MonoBehaviour {
 
         tileA.transform.SetParent(tileBParent.transform);
         tileB.transform.SetParent(tileAParent.transform);
+
+        tilePlacer.selectedTile = uiTile.tempTile;
 
         tileA = tileB = null;
     }
