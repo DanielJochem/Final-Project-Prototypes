@@ -141,6 +141,34 @@ public class UIRelatedStuff : MonoBehaviour {
     public void TestForErrorOnSave() {
         StringBuilder saveCheckSB = new StringBuilder();
 
+        int chestsPlaced = 0, chestKeysPlaced = 0, doorsPlaced = 0, doorKeysPlaced = 0;
+
+        for(int i = 0; i < GameObject.FindObjectsOfType<SpriteRenderer>().Length; ++i) {
+            if(GameObject.FindObjectsOfType<SpriteRenderer>()[i].sprite.name == "Chest") {
+                chestsPlaced++;
+            }
+
+            if(GameObject.FindObjectsOfType<SpriteRenderer>()[i].sprite.name == "Chest Key") {
+                chestKeysPlaced++;
+            }
+
+            if(GameObject.FindObjectsOfType<SpriteRenderer>()[i].sprite.name == "Door") {
+                doorsPlaced++;
+            }
+
+            if(GameObject.FindObjectsOfType<SpriteRenderer>()[i].sprite.name == "Door Key") {
+                doorKeysPlaced++;
+            }
+        }
+
+        if(chestsPlaced != chestKeysPlaced) {
+            saveCheckSB.Append("The amount of Chests and Chest Keys do not match.").AppendLine();
+        }
+
+        if(doorsPlaced != doorKeysPlaced) {
+            saveCheckSB.Append("The amount of Doors and Door Keys do not match.").AppendLine();
+        }
+
         //If there are places that haven't been filled with void
         for(int i = 0; i < tiles.Count; ++i) {
             if(tiles[i].transform.GetChild(0).GetComponent<PlacementTileListNumber>().isBlank) {
