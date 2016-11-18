@@ -1,16 +1,25 @@
 ﻿using UnityEngine;
 
 public class PlacementTileListNumber : MonoBehaviour {
-    public int listNum;
-    public bool isBlank;
+
+	[HideInInspector]
+	public int listNum;
+
+	//[HideInInspector]
+	public bool isBlank;
 
     private bool tileSet;
     private TilePlacer tilePlacer;
+	private LevelLoader levelLoader;
 
-    void Start() {
+	void Awake() {
         tilePlacer = FindObjectOfType<TilePlacer>();
-        isBlank = true;
-    }
+		levelLoader = FindObjectOfType<LevelLoader>();
+
+		if(!levelLoader.isFromLevelLoader) {
+			isBlank = true;
+		}
+	}
 
     void OnMouseOver() {
         if((Input.GetMouseButton(0) || Input.GetMouseButton(1)) && !tileSet) {

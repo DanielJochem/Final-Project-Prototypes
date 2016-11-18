@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class CameraBehaviour : MonoBehaviour {
 
-    public GameObject cameraGameObject;
+	[SerializeField]
+    private GameObject cameraGameObject;
     private Vector3 cameraPos;
     private string sizeByXY;
 
     private UIRelatedStuff uiRelatedStuff;
 
-    public float cameraMovementSpeed = 30.0f;
-    public float cameraHeightCurrent;
+	[SerializeField]
+    private float cameraMovementSpeed = 30.0f, cameraHeightCurrent;
 
-    public bool invertMovement;
+	[SerializeField]
+    private bool invertMovement;
 
     //Mouse zoom
-    public float cameraHeightIncrement;
-    private float cameraHeightMin = 20;
-    private float cameraHeightMax = 0;
+	[SerializeField]
+    public float cameraHeightIncrement, cameraHeightMin = 20, cameraHeightMax = 0;
 
     // Use this for initialization
     void Start() {
@@ -26,8 +27,7 @@ public class CameraBehaviour : MonoBehaviour {
         cameraHeightCurrent = Camera.main.orthographicSize;
         uiRelatedStuff = FindObjectOfType<UIRelatedStuff>();
     }
-
-    // Update is called once per frame
+	
     void Update() {
         if(uiRelatedStuff.xySaved) {
             moveCamera();
@@ -49,7 +49,7 @@ public class CameraBehaviour : MonoBehaviour {
     }
 
     //Controls affecting the zoom and placement of the camera
-    void cameraZooming() {
+    public void cameraZooming() {
 
         if(cameraHeightMax == 0) {
             cameraHeightMax = SetZoomLimit();
@@ -58,21 +58,6 @@ public class CameraBehaviour : MonoBehaviour {
             //Move the camera a little bit so that the zoomed out blank level is centered! (It looks beautiful, trust me).
             cameraPos.y = (sizeByXY == "X") ? -(uiRelatedStuff.xTiles / 8) : -(uiRelatedStuff.yTiles / 4);
             transform.position = cameraPos;
-        }
-
-        //Move camera focus and height based on raycast from maincamera
-        RaycastHit hit;
-        Vector2 direction = (transform.position - cameraGameObject.transform.position).normalized;
-
-        if(Physics.Raycast(cameraGameObject.transform.position, direction, out hit, 1000.0f)) {
-            Debug.DrawLine(cameraGameObject.transform.position, hit.point);
-
-            //Adjust height of the cameraHeight based on difference from focus point
-            if(Vector2.Distance(transform.position, cameraGameObject.transform.position) != cameraHeightCurrent) {
-                Vector2 newPos = cameraGameObject.transform.position;
-                Camera.main.orthographicSize = cameraHeightCurrent;
-                cameraGameObject.transform.position = newPos;
-            }
         }
 
         cameraHeightIncrement = cameraHeightCurrent / uiRelatedStuff.tileSize;
@@ -89,7 +74,7 @@ public class CameraBehaviour : MonoBehaviour {
 
     //Move Camera using mouse
     void moveCamera() {
-        if(!FindObjectOfType<UIRelatedStuff>().levelNameIF.isFocused) {
+        if(!uiRelatedStuff.levelNameIF.isFocused) {
             cameraMovementSpeed = invertMovement ? Mathf.Abs(cameraMovementSpeed) : -Mathf.Abs(cameraMovementSpeed);
 
             if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
@@ -113,8 +98,8 @@ public class CameraBehaviour : MonoBehaviour {
     float SetZoomLimit() {
         float temp;
 
-        if(((float)uiRelatedStuff.xTiles / (float)uiRelatedStuff.yTiles) >= 2.5f) {
-            temp = uiRelatedStuff.xTiles * 1.25f;
+        if(((float)uiRelatedStuff.xTiles / (float)uiRelatedStuff.yTiles) >= 2.5f) { //or 0.86f
+            temp = uiRelatedStuff.xTiles * 1.25f; //or 5f
             sizeByXY = "X";
         } else {
             temp = uiRelatedStuff.yTiles * 3.5f;
