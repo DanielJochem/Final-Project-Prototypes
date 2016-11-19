@@ -17,9 +17,12 @@ public class CameraBehaviour : MonoBehaviour {
 	[SerializeField]
     private bool invertMovement;
 
-    //Mouse zoom
+	//Mouse zoom
 	[SerializeField]
-    public float cameraHeightIncrement, cameraHeightMin = 20, cameraHeightMax = 0;
+	private float cameraHeightIncrement, cameraHeightMin = 20;
+
+	[HideInInspector]
+	public float cameraHeightMax = 0;
 
     // Use this for initialization
     void Start() {

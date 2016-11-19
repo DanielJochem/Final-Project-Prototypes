@@ -24,12 +24,15 @@ public class LevelLoader : MonoBehaviour {
 	private Vector3 currPos;
 
 	[HideInInspector]
-	public bool firstTime = true, isFromLevelLoader, alreadyCheckedFileExists;
+	public bool firstTime, isFromLevelLoader, alreadyCheckedFileExists;
 
 	private bool fileExists;
 
 	[HideInInspector]
-	public bool loadLevel;
+	public bool loadLevel, canOverwriteLevel;
+
+	[HideInInspector]
+	public string currentLoadedLevel = "iAmSomeTempText";
 
 	void Start() {
 		uiRelatedStuff = FindObjectOfType<UIRelatedStuff>();
@@ -40,17 +43,27 @@ public class LevelLoader : MonoBehaviour {
 	public void LoadLevel() {
 		if(!alreadyCheckedFileExists) {
 			fileExists = (System.IO.File.Exists(Application.dataPath + "/Saved Levels/" + uiRelatedStuff.levelName + ".csv") == true) ? true : false;
+
 			alreadyCheckedFileExists = true;
 
-			if(fileExists && uiRelatedStuff.xySaved) {
+			if(currentLoadedLevel == uiRelatedStuff.levelName) {
+				uiRelatedStuff.EnableSameLevelErrorText();
+				fileExists = false;
+			} else if(fileExists && uiRelatedStuff.xySaved) {
 				uiRelatedStuff.EnableOverwriteProgressErrorText();
-				//fileExists = false;
+				fileExists = false;
 			} else if(fileExists) {
 				loadLevel = true;
+				currentLoadedLevel = uiRelatedStuff.levelName;
 				fileExists = false;
 			} else {
 				uiRelatedStuff.EnableLevelDoesNotExistErrorText();
 			}
+		}
+
+		if(canOverwriteLevel) {
+			currentLoadedLevel = uiRelatedStuff.levelName;
+			canOverwriteLevel = false;
 		}
 
 		if(loadLevel) {
@@ -68,7 +81,10 @@ public class LevelLoader : MonoBehaviour {
 				placementTilesGridList.Clear();
 			}
 
+			uiRelatedStuff.levelLoaded = false;
 			loadedCSVString = ReadCSV(uiRelatedStuff.levelName);
+
+			firstTime = true;
 			CSVLevelLoader();
 			firstTime = false;
 
@@ -78,6 +94,7 @@ public class LevelLoader : MonoBehaviour {
 			uiRelatedStuff.yTiles = yTilesCSV;
 			uiRelatedStuff.yTilesIF.text = uiRelatedStuff.yTiles.ToString();
 
+			cameraBehaviour.cameraHeightMax = 0;
 			cameraBehaviour.cameraZooming();
 
 			uiRelatedStuff.thisIsACSVLoadedLevel = true;

@@ -9,6 +9,7 @@ public class UIRelatedStuff : MonoBehaviour {
 
 	private TilePlacer tilePlacer;
 	private LevelLoader levelLoader;
+	private UIRelatedStuff uiRelatedStuff;
 	private GameObject backdrop;
 
 	[HideInInspector]
@@ -18,12 +19,12 @@ public class UIRelatedStuff : MonoBehaviour {
 	public List<GameObject> tiles;
 
 	[SerializeField]
-	private Text fileExistsText, saveErrorText, levelDoesNotExistErrorText, overwriteProgressErrorText;
+	private Text fileExistsText, saveErrorText, levelDoesNotExistErrorText, overwriteProgressErrorText, sameLevelErrorText;
 
 	[HideInInspector]
 	public bool levelLoaded, xySaved, thisIsACSVLoadedLevel, cameFromLoadingLevel;
 
-	private bool canSave, cameFromIF;
+	private bool canSave, cameFromIF, firstTimeLoadingALevel, goodNowBad;
 
 	public InputField xTilesIF, yTilesIF, levelNameIF;
 	public EventSystem eventSystem;
@@ -36,10 +37,10 @@ public class UIRelatedStuff : MonoBehaviour {
 	[HideInInspector]
 	public string levelName;
 
-
 	void Awake() {
 		tilePlacer = FindObjectOfType<TilePlacer>();
 		levelLoader = FindObjectOfType<LevelLoader>();
+		uiRelatedStuff = FindObjectOfType<UIRelatedStuff>();
 		backdrop = GameObject.Find("Backdrop");
 
 		tileSize = 5;
@@ -64,7 +65,7 @@ public class UIRelatedStuff : MonoBehaviour {
 			xTilesIF.interactable = false;
 			yTilesIF.interactable = false;
 
-			//tiles.Clear();
+			tiles.Clear();
 			xySaved = true;
 			thisIsACSVLoadedLevel = false;
 		}
@@ -81,6 +82,7 @@ public class UIRelatedStuff : MonoBehaviour {
 						GameObject tempObj;
 						tempObj = Instantiate(tilePlacer.placementTile, currPos, Quaternion.Euler(270.0f, 0.0f, 0.0f)) as GameObject;
 						levelLoader.placementTilesGridList.Add(tempObj);
+
 						tiles.Add(tempObj);
 						tempObj.transform.GetChild(0).GetComponent<PlacementTileListNumber>().listNum = tiles.Count;
 
@@ -103,8 +105,20 @@ public class UIRelatedStuff : MonoBehaviour {
 				} else if(xTiles % 2 == 0 && yTiles % 2 == 1) {
 					backdrop.transform.position = new Vector3(backdrop.transform.position.x, backdrop.transform.position.y - 0.5f, 2);
 				} else if(xTiles % 2 == 1 && yTiles % 2 == 1) {
-					backdrop.transform.position = new Vector3(backdrop.transform.position.x + 0.5f, backdrop.transform.position.y - 0.5f, 2);
+					if(firstTimeLoadingALevel || goodNowBad) {
+						backdrop.transform.position = new Vector3(backdrop.transform.position.x + 0.5f, backdrop.transform.position.y - 0.5f, 2);
+						goodNowBad = false;
+					}
 				}
+
+				if(!firstTimeLoadingALevel) {
+					if(xTiles % 2 == 0 && yTiles % 2 == 0) {
+						backdrop.transform.position = new Vector3(0, 0, 2);
+						goodNowBad = true;
+					}
+				}
+
+				firstTimeLoadingALevel = false;
 
 				levelLoaded = true;
 			}
@@ -132,6 +146,14 @@ public class UIRelatedStuff : MonoBehaviour {
 		fileExistsText.gameObject.SetActive(false);
 	}
 
+	public void EnableSameLevelErrorText() {
+		sameLevelErrorText.gameObject.SetActive(true);
+	}
+
+	public void DisableSameLevelErrorText() {
+		sameLevelErrorText.gameObject.SetActive(false);
+	}
+
 	public void EnableLevelDoesNotExistErrorText() {
 		levelDoesNotExistErrorText.gameObject.SetActive(true);
 	}
@@ -145,14 +167,16 @@ public class UIRelatedStuff : MonoBehaviour {
 		overwriteProgressErrorText.gameObject.SetActive(true);
 	}
 
-	public void OverwriteProgress() {
-		DisableOverwriteProgressErrorText();
-		levelLoader.loadLevel = true;
-		levelLoader.LoadLevel();
-	}
-
 	public void DisableOverwriteProgressErrorText() {
 		overwriteProgressErrorText.gameObject.SetActive(false);
+	}
+
+	public void OverwriteProgress() {
+		DisableOverwriteProgressErrorText();
+		DisableSameLevelErrorText();
+		levelLoader.canOverwriteLevel = true;
+		levelLoader.loadLevel = true;
+		levelLoader.LoadLevel();
 	}
 
 	public void SetXTiles(InputField inputField) {
