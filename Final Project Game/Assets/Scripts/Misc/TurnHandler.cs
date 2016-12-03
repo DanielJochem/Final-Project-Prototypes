@@ -19,7 +19,9 @@ public class TurnHandler : MonoBehaviour {
 
     void Update() {
         if(levelSet) {
+
             player.PlayerMovementLogic();
+            
 
             if(turnNumber > turnNumberSAVED) {
                 foreach(GameObject enemy in enemyList) {
