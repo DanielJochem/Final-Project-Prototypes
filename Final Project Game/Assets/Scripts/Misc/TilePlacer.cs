@@ -116,7 +116,7 @@ public class TilePlacer : MonoBehaviour {
             GameObject enemy = Instantiate(enemyPrefab, tiles[(randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) - 1].transform.position, Quaternion.identity) as GameObject;
             enemy.GetComponent<EnemyMovement>().currentTileNumber = randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY;
             enemy.GetComponent<EnemyMovement>().xTilesAmount = xTiles;
-            enemy.GetComponent<EnemyMovement>().xTilesAmount = yTiles;
+            enemy.GetComponent<EnemyMovement>().yTilesAmount = yTiles;
 
             enemyList.Add(enemy);
             enemy.transform.SetParent(enemiesParent.transform);

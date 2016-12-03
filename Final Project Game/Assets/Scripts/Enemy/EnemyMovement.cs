@@ -8,17 +8,19 @@ public class EnemyMovement : MonoBehaviour {
 
     [SerializeField]
     private PlayerMovement player;
-    
+
     [HideInInspector]
     public int xTilesAmount, yTilesAmount;
 
     [Space(20)]
     public int currentTileNumber;
 
-    private List<string> illegalMoves, acceptableMoves;
+    public List<string> illegalMoves, acceptableMoves;
 
     [SerializeField]
     private List<string> directions;
+
+    private bool attackThisTurn;
 
 
     void Start() {
@@ -29,17 +31,30 @@ public class EnemyMovement : MonoBehaviour {
 
     public void EnemyMovementLogic() {
         PlayerAndEnemyLocationChecker();
-        CheckBoundaries();
 
-        //All checks are done, now the Enemy can move!
-        MovementCheckerAndMove();
+        if(attackThisTurn) {
+            //Don't move, instead attack!
+
+
+            attackThisTurn = false;
+
+        } else {
+            //Continue checking for movement directions
+            CheckBoundaries();
+
+            //All checks are done, now the Enemy can move!
+            MovementCheckerAndMove();
+        }
+        
+        illegalMoves.Clear();
+        acceptableMoves.Clear();
     }
 
 
     void PlayerAndEnemyLocationChecker() {
         //Up
         //If Player is not in wantedPosition
-        if(player.currentTileNumber != currentTileNumber - xTilesAmount) {
+        if(player.wantedTileNumber != currentTileNumber - xTilesAmount) {
             //If no Enemy is in that position
             foreach(GameObject enemy in turnHandler.enemyList) {
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber - xTilesAmount) {
@@ -47,12 +62,13 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            illegalMoves.Add("Up");
+            //Attack, don't move
+            attackThisTurn = true;
         }
 
         //UpRight
         //If Player is not in wantedPosition
-        if(player.currentTileNumber != currentTileNumber - (xTilesAmount - 1)) {
+        if(player.wantedTileNumber != currentTileNumber - (xTilesAmount - 1)) {
             //If no Enemy is in that position
             foreach(GameObject enemy in turnHandler.enemyList) {
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber - (xTilesAmount - 1)) {
@@ -60,12 +76,13 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            illegalMoves.Add("UpRight");
+            //Attack, don't move
+            attackThisTurn = true;
         }
 
         //Right
         //If Player is not in wantedPosition
-        if(player.currentTileNumber != currentTileNumber + 1) {
+        if(player.wantedTileNumber != currentTileNumber + 1) {
             //If no Enemy is in that position
             foreach(GameObject enemy in turnHandler.enemyList) {
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber + 1) {
@@ -73,12 +90,13 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            illegalMoves.Add("Right");
+            //Attack, don't move
+            attackThisTurn = true;
         }
 
         //DownRight
         //If Player is not in wantedPosition
-        if(player.currentTileNumber != currentTileNumber + (xTilesAmount + 1)) {
+        if(player.wantedTileNumber != currentTileNumber + (xTilesAmount + 1)) {
             //If no Enemy is in that position
             foreach(GameObject enemy in turnHandler.enemyList) {
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber + (xTilesAmount + 1)) {
@@ -86,12 +104,13 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            illegalMoves.Add("DownRight");
+            //Attack, don't move
+            attackThisTurn = true;
         }
 
         //Down
         //If Player is not in wantedPosition
-        if(player.currentTileNumber != currentTileNumber + xTilesAmount) {
+        if(player.wantedTileNumber != currentTileNumber + xTilesAmount) {
             //If no Enemy is in that position
             foreach(GameObject enemy in turnHandler.enemyList) {
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber + xTilesAmount) {
@@ -99,12 +118,13 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            illegalMoves.Add("Down");
+            //Attack, don't move
+            attackThisTurn = true;
         }
 
         //DownLeft
         //If Player is not in wantedPosition
-        if(player.currentTileNumber != currentTileNumber + (xTilesAmount - 1)) {
+        if(player.wantedTileNumber != currentTileNumber + (xTilesAmount - 1)) {
             //If no Enemy is in that position
             foreach(GameObject enemy in turnHandler.enemyList) {
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber + (xTilesAmount - 1)) {
@@ -112,12 +132,13 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            illegalMoves.Add("DownLeft");
+            //Attack, don't move
+            attackThisTurn = true;
         }
 
         //Left
         //If Player is not in wantedPosition
-        if(player.currentTileNumber != currentTileNumber - 1) {
+        if(player.wantedTileNumber != currentTileNumber - 1) {
             //If no Enemy is in that position
             foreach(GameObject enemy in turnHandler.enemyList) {
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber - 1) {
@@ -125,12 +146,13 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            illegalMoves.Add("Left");
+            //Attack, don't move
+            attackThisTurn = true;
         }
 
         //UpLeft
         //If Player is not in wantedPosition
-        if(player.currentTileNumber != currentTileNumber - (xTilesAmount + 1)) {
+        if(player.wantedTileNumber != currentTileNumber - (xTilesAmount + 1)) {
             //If no Enemy is in that position
             foreach(GameObject enemy in turnHandler.enemyList) {
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber - (xTilesAmount + 1)) {
@@ -138,7 +160,8 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            illegalMoves.Add("UpLeft");
+            //Attack, don't move
+            attackThisTurn = true;
         }
     }
 
@@ -150,7 +173,7 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         //UpRight
-        if(currentTileNumber - (xTilesAmount - 1) < 2) {
+        if(currentTileNumber - (xTilesAmount - 1) < 2 || (currentTileNumber - (xTilesAmount - 1)) % xTilesAmount == 1) {
             illegalMoves.Add("UpRight");
         }
 
@@ -160,7 +183,7 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         //DownRight
-        if(currentTileNumber + (xTilesAmount + 1) > xTilesAmount * yTilesAmount) {
+        if(currentTileNumber + (xTilesAmount + 1) > xTilesAmount * yTilesAmount || (currentTileNumber + (xTilesAmount + 1)) % xTilesAmount == 1) {
             illegalMoves.Add("DownRight");
         }
 
@@ -170,7 +193,7 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         //DownLeft
-        if(currentTileNumber + (xTilesAmount - 1) > (xTilesAmount * yTilesAmount) - 1) {
+        if(currentTileNumber + (xTilesAmount - 1) > (xTilesAmount * yTilesAmount) - 1 || (currentTileNumber + (xTilesAmount - 1)) % xTilesAmount == 0) {
             illegalMoves.Add("DownLeft");
         }
 
@@ -180,7 +203,7 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         //UpLeft
-        if(currentTileNumber - (xTilesAmount + 1) <= 0) {
+        if(currentTileNumber - (xTilesAmount + 1) <= 0 || (currentTileNumber - (xTilesAmount + 1)) % xTilesAmount == 0) {
             illegalMoves.Add("UpLeft");
         }
     }
@@ -188,6 +211,11 @@ public class EnemyMovement : MonoBehaviour {
 
     string RandomDirection() {
         int directionChoice = Random.Range(0, acceptableMoves.Count);
+
+        //string[] tempArray = acceptableMoves.ToArray();
+        //string tempString = string.Join(", ", tempArray);
+        //Debug.Log("List of Available Moves: " + tempString);
+        //Debug.Log("Direction Chosen: " + acceptableMoves[directionChoice]);
         return acceptableMoves[directionChoice];
     }
 
@@ -216,9 +244,6 @@ public class EnemyMovement : MonoBehaviour {
         if(moveDirection != "") {
             Move(moveDirection);
         }
-
-        illegalMoves.Clear();
-        acceptableMoves.Clear();
     }
 
 
