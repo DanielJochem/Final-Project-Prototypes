@@ -3,22 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour {
-    public TurnHandler turnHandler;
+    private TurnHandler turnHandler;
 
     [HideInInspector]
     public int xTilesAmount;
-
-    public int currentTileNumber, wantedTileNumber;
-
-    [SerializeField]
+    
+    [HideInInspector]
+    public int currentTileNumber = -1, wantedTileNumber = -1;
+    
     private bool moveDelay;
-
+    
     private float timeDelay;
 
+    [HideInInspector]
     public string direction = "";
 
 
     void Start() {
+        turnHandler = FindObjectOfType<TurnHandler>();
         timeDelay = turnHandler.timeDelay;
     }
 
@@ -26,19 +28,15 @@ public class PlayerMovement : MonoBehaviour {
     public void PlayerMovementLogic() {
         if(currentTileNumber == wantedTileNumber) {
             wantedTileNumber = -1;
-            //Debug.Log("The Same");
             direction = "";
         }
 
         if(wantedTileNumber != -1) {
             if(!moveDelay) {
                 if(currentTileNumber != wantedTileNumber) {
-                    Debug.Log(turnHandler.turnNumber + " Before: " + currentTileNumber);
                     Move();
-                    //Debug.Log("Player Moved");
                     moveDelay = true;
                 } else {
-                    Debug.Log(turnHandler.turnNumber + " After: " + currentTileNumber);
                     wantedTileNumber = -1;
                 }
             }

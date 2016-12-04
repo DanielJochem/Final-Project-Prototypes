@@ -4,26 +4,37 @@ using System.Collections.Generic;
 
 public class TurnHandler : MonoBehaviour {
 
-    public PlayerMovement player;
+    public Player player;
+    public TilePlacer tilePlacer;
 
     public float timeDelay;
     public int turnNumber;
     private int turnNumberSAVED;
 
+    public GameObject wonGameUI, lostGameUI;
+
     [HideInInspector]
-    public bool levelSet;
+    public bool levelSet, playerAttackInsteadOfMove;
 
     [HideInInspector]
     public List<GameObject> enemyList;
 
+    [HideInInspector]
+    public GameObject enemyToAttack;
+
 
     void Update() {
         if(levelSet) {
+            if(playerAttackInsteadOfMove) {
+                player.Attack(enemyToAttack);
+                if(enemyList.Count == 0) {
+                    wonGameUI.SetActive(true);
+                }
+            } else {
+                player.Movement();
+            }
 
-            player.PlayerMovementLogic();
-            
-
-            if(turnNumber > turnNumberSAVED) {
+            if(turnNumber > turnNumberSAVED && enemyList.Count > 0) {
                 foreach(GameObject enemy in enemyList) {
                     enemy.GetComponent<EnemyMovement>().EnemyMovementLogic();
                 }
@@ -31,5 +42,24 @@ public class TurnHandler : MonoBehaviour {
                 turnNumberSAVED++;
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.Escape)) {
+            QuitGame();
+        }
+    }
+
+    public void RestartGame() {
+        wonGameUI.SetActive(false);
+        lostGameUI.SetActive(false);
+        turnNumber = turnNumberSAVED = 0;
+        player.health.health = player.health.maxHealth;
+        player.health.healthBar.transform.localScale = new Vector3(((float)player.health.health / (float)player.health.maxHealth) * (float)player.health.maxHealthBarScale, player.health.healthBar.transform.localScale.y, player.health.healthBar.transform.localScale.z);
+        player.movement.direction = "";
+        tilePlacer.RestartGame();
+    }
+
+    public void QuitGame() {
+        lostGameUI.SetActive(false);
+        Application.Quit();
     }
 }
