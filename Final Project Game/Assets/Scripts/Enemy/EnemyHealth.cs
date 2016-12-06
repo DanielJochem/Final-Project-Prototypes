@@ -4,6 +4,7 @@ using System.Collections;
 public class EnemyHealth : MonoBehaviour {
     private GameObject healthBar;
     private TurnHandler turnHandler;
+    private Player player;
 
     public int health, looseHealthAmount, maxHealth;
 
@@ -14,6 +15,7 @@ public class EnemyHealth : MonoBehaviour {
         healthBar = gameObject.transform.GetChild(0).GetChild(1).gameObject;
         maxHealthBarScale = healthBar.transform.localScale.x;
         turnHandler = FindObjectOfType<TurnHandler>();
+        player = FindObjectOfType<Player>();
     }
 
 
@@ -38,6 +40,8 @@ public class EnemyHealth : MonoBehaviour {
 
         if(health == 0) {
             Debug.Log("Enemy Died");
+
+            player.health.UpdateHealth(5);
 
             for(int i = 0; i < turnHandler.enemyList.Count; ++i) {
                 if(gameObject.GetComponent<EnemyMovement>().currentTileNumber == turnHandler.enemyList[i].GetComponent<EnemyMovement>().currentTileNumber) {
