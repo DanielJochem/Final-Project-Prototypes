@@ -5,10 +5,22 @@ using System.Collections.Generic;
 public class PlayerMovement : MonoBehaviour {
     private TurnHandler turnHandler;
 
+    #region Armour Fields
+    public enum ArmourType {
+        plate = 1,
+        leather
+    }
+
+    public ArmourType armourType;
+
+    private int armourTypeValue;
+    #endregion
+
+    #region Misc Fields
     [HideInInspector]
     public int xTilesAmount;
-    
-    [HideInInspector]
+
+    //[HideInInspector]
     public int currentTileNumber = -1, wantedTileNumber = -1;
     
     private bool moveDelay;
@@ -17,11 +29,14 @@ public class PlayerMovement : MonoBehaviour {
 
     [HideInInspector]
     public string direction = "";
-
+    #endregion
 
     void Start() {
         turnHandler = FindObjectOfType<TurnHandler>();
         timeDelay = turnHandler.timeDelay;
+        //armourType = ArmourType.leather;
+        armourTypeValue = (int)armourType;
+        //Debug.Log("The current armour worn is: " + System.Enum.GetName(typeof(ArmourType), armourType));
     }
 
 
@@ -60,83 +75,88 @@ public class PlayerMovement : MonoBehaviour {
     public void Move() {
         if(direction == "") {
             //Up
-            if(wantedTileNumber < currentTileNumber && ((currentTileNumber - wantedTileNumber) % xTilesAmount == 0)) {
+            if(wantedTileNumber == (currentTileNumber - (xTilesAmount * armourTypeValue)) /*&& ((currentTileNumber - wantedTileNumber) % xTilesAmount == 0)*/) {
                 //Debug.Log("Up");
                 direction = "Up";
 
-                //Left
-            } else if(wantedTileNumber < currentTileNumber && ((Mathf.CeilToInt(((float)currentTileNumber - 1.0f) / (float)xTilesAmount)) == (Mathf.CeilToInt((float)wantedTileNumber / (float)xTilesAmount))) && !(wantedTileNumber % xTilesAmount == 0)) {
+            //Left
+            } else if(wantedTileNumber == (currentTileNumber - (1 * armourTypeValue)) && (Mathf.CeilToInt((float)currentTileNumber / (float)xTilesAmount) == (Mathf.CeilToInt((float)wantedTileNumber / (float)xTilesAmount))) /*&& !(wantedTileNumber % xTilesAmount == 0)*/) {
                 //Debug.Log("Left");
                 direction = "Left";
 
-                //Right
-            } else if(wantedTileNumber > currentTileNumber && ((Mathf.CeilToInt((float)currentTileNumber / (float)xTilesAmount)) == (Mathf.CeilToInt(((float)wantedTileNumber - 1.0f) / (float)xTilesAmount))) && !((wantedTileNumber - 1.0f) % xTilesAmount == 0)) {
+            //Right
+            } else if(wantedTileNumber == (currentTileNumber + (1 * armourTypeValue)) && (Mathf.CeilToInt((float)currentTileNumber / (float)xTilesAmount) == (Mathf.CeilToInt((float)wantedTileNumber / (float)xTilesAmount))) /*&& !((wantedTileNumber - 1.0f) % xTilesAmount == 0)*/) {
                 //Debug.Log("Right");
                 direction = "Right";
 
-                //Down
-            } else if(wantedTileNumber > currentTileNumber && ((wantedTileNumber - currentTileNumber) % xTilesAmount == 0)) {
+            //Down
+            } else if(wantedTileNumber == (currentTileNumber + (xTilesAmount * armourTypeValue)) /*&& ((wantedTileNumber - currentTileNumber) % xTilesAmount == 0)*/) {
                 //Debug.Log("Down");
                 direction = "Down";
 
-                //DownRight                                                                                                                                                                               //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
-            } else if(wantedTileNumber > currentTileNumber && ((wantedTileNumber - currentTileNumber) % (xTilesAmount + 1) == 0) && (wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4))) { // || wantedTileNumber - currentTileNumber != ((xTilesAmount + 1) * 4))) { //&& wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4) || wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4)) {
+            //DownRight                                                                                                                                                                                                                                             //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
+            } else if(wantedTileNumber == (currentTileNumber + ((xTilesAmount + 1) * armourTypeValue)) /*&& ((wantedTileNumber - currentTileNumber) % (xTilesAmount + 1) == 0) && (wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4))*/) {                    // || wantedTileNumber - currentTileNumber != ((xTilesAmount + 1) * 4))) { //&& wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4) || wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4)) {
                 //Debug.Log("DownRight");
                 direction = "DownRight";
 
-                //DownLeft
-            } else if(wantedTileNumber > currentTileNumber && ((wantedTileNumber - currentTileNumber) % (xTilesAmount - 1) == 0) ) {
+            //DownLeft
+            } else if(wantedTileNumber == (currentTileNumber + ((xTilesAmount - 1) * armourTypeValue)) /*&& ((wantedTileNumber - currentTileNumber) % (xTilesAmount - 1) == 0)*/) {
                 //Debug.Log("DownLeft");
                 direction = "DownLeft";
 
-                //UpLeft                                                                                                                                                                                  //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
-            } else if(wantedTileNumber < currentTileNumber && ((currentTileNumber - wantedTileNumber) % (xTilesAmount + 1) == 0) && (currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 3))) { // || currentTileNumber - wantedTileNumber != ((xTilesAmount - 1) * 3))) { //&& currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 3) || currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 4)) {
+            //UpLeft                                                                                                                                                                                                     //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
+            } else if(wantedTileNumber == (currentTileNumber - ((xTilesAmount + 1) * armourTypeValue)) /*&& ((currentTileNumber - wantedTileNumber) % (xTilesAmount + 1) == 0) && (currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 3))*/) {                    // || currentTileNumber - wantedTileNumber != ((xTilesAmount - 1) * 3))) { //&& currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 3) || currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 4)) {
                 //Debug.Log("UpLeft");
                 direction = "UpLeft";
 
-                //UpRight
-            } else if(wantedTileNumber < currentTileNumber && ((currentTileNumber - wantedTileNumber) % (xTilesAmount - 1) == 0)) {
+            //UpRight
+            } else if(wantedTileNumber == (currentTileNumber - ((xTilesAmount - 1) * armourTypeValue)) /*&& ((currentTileNumber - wantedTileNumber) % (xTilesAmount - 1) == 0)*/) {
                 //Debug.Log("UpRight");
                 direction = "UpRight";
 
             } else {
                 wantedTileNumber = currentTileNumber;
+                direction = "";
             }
         }
 
 
         if(direction == "Up") {
-            currentTileNumber -= xTilesAmount;
-            gameObject.transform.position += new Vector3(0, 1, 0);
+            currentTileNumber -= xTilesAmount * armourTypeValue;
+            gameObject.transform.position += new Vector3(0, 1 * armourTypeValue, 0);
             turnHandler.turnNumber++;
         } else if(direction == "UpRight") {
-            currentTileNumber -= (xTilesAmount - 1);
-            gameObject.transform.position += new Vector3(1, 1, 0);
+            currentTileNumber -= (xTilesAmount - 1) * armourTypeValue;
+            gameObject.transform.position += new Vector3(1 * armourTypeValue, 1 * armourTypeValue, 0);
             turnHandler.turnNumber++;
         } else if(direction == "Right") {
-            currentTileNumber += 1;
-            gameObject.transform.position += new Vector3(1, 0, 0);
+            currentTileNumber += 1 * armourTypeValue;
+            gameObject.transform.position += new Vector3(1 * armourTypeValue, 0, 0);
             turnHandler.turnNumber++;
         } else if(direction == "DownRight") {
-            currentTileNumber += (xTilesAmount + 1);
-            gameObject.transform.position += new Vector3(1, -1, 0);
+            currentTileNumber += (xTilesAmount + 1) * armourTypeValue;
+            gameObject.transform.position += new Vector3(1 * armourTypeValue, -1 * armourTypeValue, 0);
             turnHandler.turnNumber++;
         } else if(direction == "Down") {
-            currentTileNumber += xTilesAmount;
-            gameObject.transform.position += new Vector3(0, -1, 0);
+            currentTileNumber += xTilesAmount * armourTypeValue;
+            gameObject.transform.position += new Vector3(0, -1 * armourTypeValue, 0);
             turnHandler.turnNumber++;
         } else if(direction == "DownLeft") {
-            currentTileNumber += (xTilesAmount - 1);
-            gameObject.transform.position += new Vector3(-1, -1, 0);
+            currentTileNumber += (xTilesAmount - 1) * armourTypeValue;
+            gameObject.transform.position += new Vector3(-1 * armourTypeValue, -1 * armourTypeValue, 0);
             turnHandler.turnNumber++;
         } else if(direction == "Left") {
-            currentTileNumber -= 1;
-            gameObject.transform.position += new Vector3(-1, 0, 0);
+            currentTileNumber -= 1 * armourTypeValue;
+            gameObject.transform.position += new Vector3(-1 * armourTypeValue, 0, 0);
             turnHandler.turnNumber++;
         } else if(direction == "UpLeft") {
-            currentTileNumber -= (xTilesAmount + 1);
-            gameObject.transform.position += new Vector3(-1, 1, 0);
+            currentTileNumber -= (xTilesAmount + 1) * armourTypeValue;
+            gameObject.transform.position += new Vector3(-1 * armourTypeValue, 1 * armourTypeValue, 0);
             turnHandler.turnNumber++;
         }
+    }
+
+    int ChangeArmourTypeTo(ArmourType armour) {
+        return (int)armour;
     }
 }

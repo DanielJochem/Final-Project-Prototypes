@@ -60,7 +60,7 @@ public class EnemyMovement : MonoBehaviour {
             }
         } else {
             //Attack, don't move
-            print("Enemy Attacked Up");
+            //print("Enemy Attacked Up");
             attackThisTurn = true;
         }
 
@@ -75,7 +75,7 @@ public class EnemyMovement : MonoBehaviour {
             }
         } else {
             //Attack, don't move
-            print("Enemy Attacked UpRight");
+            //print("Enemy Attacked UpRight");
             attackThisTurn = true;
         }
 
@@ -90,7 +90,7 @@ public class EnemyMovement : MonoBehaviour {
             }
         } else {
             //Attack, don't move
-            print("Enemy Attacked Right");
+            //print("Enemy Attacked Right");
             attackThisTurn = true;
         }
 
@@ -105,7 +105,7 @@ public class EnemyMovement : MonoBehaviour {
             }
         } else {
             //Attack, don't move
-            print("Enemy Attacked DownRight");
+            //print("Enemy Attacked DownRight");
             attackThisTurn = true;
         }
 
@@ -120,7 +120,7 @@ public class EnemyMovement : MonoBehaviour {
             }
         } else {
             //Attack, don't move
-            print("Enemy Attacked Down");
+            //print("Enemy Attacked Down");
             attackThisTurn = true;
         }
 
@@ -135,7 +135,7 @@ public class EnemyMovement : MonoBehaviour {
             }
         } else {
             //Attack, don't move
-            print("Enemy Attacked DownLeft");
+            //print("Enemy Attacked DownLeft");
             attackThisTurn = true;
         }
 
@@ -150,7 +150,7 @@ public class EnemyMovement : MonoBehaviour {
             }
         } else {
             //Attack, don't move
-            print("Enemy Attacked Left");
+            //print("Enemy Attacked Left");
             attackThisTurn = true;
         }
 
@@ -165,7 +165,7 @@ public class EnemyMovement : MonoBehaviour {
             }
         } else {
             //Attack, don't move
-            print("Enemy Attacked UpLeft");
+            //print("Enemy Attacked UpLeft");
             attackThisTurn = true;
         }
     }
