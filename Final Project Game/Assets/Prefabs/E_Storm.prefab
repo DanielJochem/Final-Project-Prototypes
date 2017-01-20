@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4000012021517276}
   - component: {fileID: 212000013289528250}
   m_Layer: 0
-  m_Name: Earth_Elemental
+  m_Name: Storm_Elemental
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,7 +54,7 @@ GameObject:
   - component: {fileID: 114000010549256062}
   - component: {fileID: 114000012004571490}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: E_Storm
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,8 +98,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011625186954}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: -0.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.4, z: -0.5}
+  m_LocalScale: {x: 1, y: 0.9, z: 1}
   m_Children: []
   m_Father: {fileID: 4000012127273194}
   m_RootOrder: 1
@@ -124,7 +124,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011901657510}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.5894399, y: -0.68996, z: -0.032663}
+  m_LocalPosition: {x: 0.08895755, y: -3.216192, z: -0.032663}
   m_LocalScale: {x: 0.15917157, y: 0.15917157, z: 0.15917157}
   m_Children:
   - {fileID: 4000012412605274}
@@ -139,7 +139,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013557259874}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.99, z: 0}
+  m_LocalPosition: {x: 0, y: -3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4000012557138864}
@@ -265,7 +265,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b3f3c05f993dea24b90ab08d132ee1d1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 01a45aa3b2d3b4d4e9d2bba367ed7af9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

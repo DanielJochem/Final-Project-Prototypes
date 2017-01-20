@@ -10,12 +10,17 @@ public class TilePlacer : MonoBehaviour {
 
     [Header("Manually Dragged-In")]
     [SerializeField]
-    private GameObject tilePrefab, enemyPrefab;
+    private GameObject tilePrefab;
 
-    [Space(20)]
+    //[Space(5)]
     [SerializeField]
-    private int xTiles, yTiles, tileSize, enemiesWanted;
+    private int xTiles, yTiles, tileSize;
 
+
+    [Space(5)]
+    [Header("Enemies To Spawn")]
+    [SerializeField]
+    private List<EnemySpawner> enemiesWanted;
 
     [HideInInspector]
     public List<GameObject> tiles, enemyList;
@@ -85,44 +90,46 @@ public class TilePlacer : MonoBehaviour {
 
 
     void SetUpEnemies() {
-        for(var i = 0; i < enemiesWanted; ++i) {
-            bool checkForSpawnPosition = true;
-            while(checkForSpawnPosition) {
-                randomTileToSpawnOnEnemyX = Random.Range(1, xTiles);
-                randomTileToSpawnOnEnemyY = Random.Range(1, yTiles);
+        for(int i = 0; i < enemiesWanted.Count; ++i) {
+            for(int j = 0; j < enemiesWanted[i].enemyAmount; j++) {
+                bool checkForSpawnPosition = true;
+                while(checkForSpawnPosition) {
+                    randomTileToSpawnOnEnemyX = Random.Range(1, xTiles);
+                    randomTileToSpawnOnEnemyY = Random.Range(1, yTiles);
 
-                //We don't want to spawn enemies in any of the 4 corners, trust me, its gross, so this if statement checks if the current X and Y to spawn an enemy is in any of the 4 devilish corners.
-                if(!((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) == 1) && !((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) == xTiles) && !((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) == (xTiles * yTiles)) && !((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) == ((xTiles * yTiles) - (xTiles - 1)))) {
-                    //Check to see if the current X and Y to spawn an enemy at would spawnn the enemy on top of the character.
-                    if((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) != player.movement.currentTileNumber) {
-                        //Debug.Log("Checking for Enemy number " + (i + 1) + "...");
-                        if(enemyList.Count > 0) {
-                            checkForSpawnPosition = false;
-                            foreach(GameObject enemyCheckPos in enemyList) {
-                                if((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) != enemyCheckPos.GetComponent<EnemyMovement>().currentTileNumber) {
-                                    continue;
-                                } else {
-                                    //Debug.Log("Enemy already at wanted position.");
-                                    checkForSpawnPosition = true;
-                                    break;
+                    //We don't want to spawn enemies in any of the 4 corners, trust me, its gross, so this if statement checks if the current X and Y to spawn an enemy is in any of the 4 devilish corners.
+                    if(!((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) == 1) && !((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) == xTiles) && !((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) == (xTiles * yTiles)) && !((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) == ((xTiles * yTiles) - (xTiles - 1)))) {
+                        //Check to see if the current X and Y to spawn an enemy at would spawnn the enemy on top of the character.
+                        if((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) != player.movement.currentTileNumber) {
+                            //Debug.Log("Checking for Enemy number " + (i + 1) + "...");
+                            if(enemyList.Count > 0) {
+                                checkForSpawnPosition = false;
+                                foreach(GameObject enemyCheckPos in enemyList) {
+                                    if((randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) != enemyCheckPos.GetComponent<EnemyMovement>().currentTileNumber) {
+                                        continue;
+                                    } else {
+                                        //Debug.Log("Enemy already at wanted position.");
+                                        checkForSpawnPosition = true;
+                                        break;
+                                    }
                                 }
+                                //Location is clear, place Enemy.
+                            } else {
+                                //Debug.Log("No Enemies in enemyList, place Enemy.");
+                                checkForSpawnPosition = false;
                             }
-                            //Location is clear, place Enemy.
-                        } else {
-                            //Debug.Log("No Enemies in enemyList, place Enemy.");
-                            checkForSpawnPosition = false;
                         }
                     }
                 }
+
+                GameObject enemy = Instantiate(enemiesWanted[i].enemyType, tiles[(randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) - 1].transform.position, Quaternion.identity) as GameObject;
+                enemy.GetComponent<EnemyMovement>().currentTileNumber = randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY;
+                enemy.GetComponent<EnemyMovement>().xTilesAmount = xTiles;
+                enemy.GetComponent<EnemyMovement>().yTilesAmount = yTiles;
+
+                enemyList.Add(enemy);
+                enemy.transform.SetParent(enemiesParent.transform);
             }
-
-            GameObject enemy = Instantiate(enemyPrefab, tiles[(randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) - 1].transform.position, Quaternion.identity) as GameObject;
-            enemy.GetComponent<EnemyMovement>().currentTileNumber = randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY;
-            enemy.GetComponent<EnemyMovement>().xTilesAmount = xTiles;
-            enemy.GetComponent<EnemyMovement>().yTilesAmount = yTiles;
-
-            enemyList.Add(enemy);
-            enemy.transform.SetParent(enemiesParent.transform);
         }
 
         turnHandler.enemyList = enemyList;
@@ -132,4 +139,10 @@ public class TilePlacer : MonoBehaviour {
         SetUpPlayer();
         SetUpEnemies();
     }
+}
+
+[System.Serializable]
+public class EnemySpawner {
+    public GameObject enemyType;
+    public int enemyAmount;
 }

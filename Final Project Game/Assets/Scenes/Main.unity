@@ -342,7 +342,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &313542798
 GameObject:
@@ -444,12 +444,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 1000012079669892, guid: a9059cc7631539d4693fb03a029d22bb, type: 2}
-  enemyPrefab: {fileID: 1000011901657510, guid: 945ddb916facf5249a4528fcc5060d30,
-    type: 2}
   xTiles: 7
   yTiles: 7
   tileSize: 1
-  enemiesWanted: 5
+  enemiesWanted:
+  - enemyType: {fileID: 1000011901657510, guid: 945ddb916facf5249a4528fcc5060d30,
+      type: 2}
+    enemyAmount: 1
+  - enemyType: {fileID: 1000011901657510, guid: 8370f880fd0151c489bbc3e573d99f5d,
+      type: 2}
+    enemyAmount: 1
+  - enemyType: {fileID: 1000011901657510, guid: 52fc914c58a988a42b628378c055e8c6,
+      type: 2}
+    enemyAmount: 1
+  - enemyType: {fileID: 1000011901657510, guid: 11e19b734cc26d94fab577206f5cb754,
+      type: 2}
+    enemyAmount: 1
+  - enemyType: {fileID: 1000011901657510, guid: e15e9ec140df530448a265dc05c34164,
+      type: 2}
+    enemyAmount: 1
+  - enemyType: {fileID: 1000011901657510, guid: 9cbb6ef344ee1d04683b59e1a2647c25,
+      type: 2}
+    enemyAmount: 1
+  - enemyType: {fileID: 1000011901657510, guid: 67ebdc6a72a5f664d91c8178da385d25,
+      type: 2}
+    enemyAmount: 1
   tiles: []
   enemyList: []
 --- !u!1 &374622413
@@ -647,7 +666,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &385561012
 MonoBehaviour:
@@ -783,7 +802,7 @@ Transform:
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &701769641
 GameObject:
