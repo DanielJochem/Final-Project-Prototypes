@@ -12,7 +12,6 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private TurnHandler turnHandler;
 
-
     public void Movement() {
         movement.PlayerMovementLogic();
     }

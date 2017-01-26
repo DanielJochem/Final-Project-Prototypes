@@ -84,6 +84,8 @@ public class TilePlacer : MonoBehaviour {
         int randomTileToSpawnOnPlayerY = Random.Range(1, yTiles);
 
         player.gameObject.transform.position = tiles[(randomTileToSpawnOnPlayerX * randomTileToSpawnOnPlayerY) - 1].transform.position;
+        player.gameObject.transform.position = new Vector3(player.gameObject.transform.position.x, player.gameObject.transform.position.y, 1.5f);
+
         player.movement.currentTileNumber = randomTileToSpawnOnPlayerX * randomTileToSpawnOnPlayerY;
         player.movement.wantedTileNumber = -1;
     }
@@ -122,7 +124,8 @@ public class TilePlacer : MonoBehaviour {
                     }
                 }
 
-                GameObject enemy = Instantiate(enemiesWanted[i].enemyType, tiles[(randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) - 1].transform.position, Quaternion.identity) as GameObject;
+                GameObject enemy = Instantiate(enemiesWanted[i].enemyType, tiles[(randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY) - 1].transform.position, Quaternion.Euler(135f, 90f, -90f)) as GameObject;
+                enemy.gameObject.transform.position = new Vector3(enemy.gameObject.transform.position.x, enemy.gameObject.transform.position.y, 1.5f);
                 enemy.GetComponent<EnemyMovement>().currentTileNumber = randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY;
                 enemy.GetComponent<EnemyMovement>().xTilesAmount = xTiles;
                 enemy.GetComponent<EnemyMovement>().yTilesAmount = yTiles;

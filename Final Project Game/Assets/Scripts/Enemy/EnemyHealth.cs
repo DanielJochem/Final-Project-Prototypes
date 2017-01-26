@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour {
-    private GameObject healthBar;
+    public Slider healthBar;
     private TurnHandler turnHandler;
     private Player player;
 
@@ -12,8 +13,6 @@ public class EnemyHealth : MonoBehaviour {
 
 
     void Start() {
-        healthBar = gameObject.transform.GetChild(0).GetChild(1).gameObject;
-        maxHealthBarScale = healthBar.transform.localScale.x;
         turnHandler = FindObjectOfType<TurnHandler>();
         player = FindObjectOfType<Player>();
     }
@@ -53,7 +52,7 @@ public class EnemyHealth : MonoBehaviour {
             //healthBar.transform.localScale = new Vector3(0.0f, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
         } else {
             //Debug.Log(healthBar.transform.localScale + "- Health: " + health + ", " + " Max Health: " + maxHealth + ", " + " Max Health Bar Scale: " + maxHealthBarScale + ": " + (float)(((float)health / (float)maxHealth) * (float)maxHealthBarScale));
-            healthBar.transform.localScale = new Vector3((float)(((float)health / (float)maxHealth) * (float)maxHealthBarScale), healthBar.transform.localScale.y, healthBar.transform.localScale.z);
+            healthBar.value = health;
         }
     }
 }

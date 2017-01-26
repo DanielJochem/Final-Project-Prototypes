@@ -53,7 +53,7 @@ public class TurnHandler : MonoBehaviour {
         lostGameUI.SetActive(false);
         turnNumber = turnNumberSAVED = 0;
         player.health.health = player.health.maxHealth;
-        player.health.healthBar.transform.localScale = new Vector3(((float)player.health.health / (float)player.health.maxHealth) * (float)player.health.maxHealthBarScale, player.health.healthBar.transform.localScale.y, player.health.healthBar.transform.localScale.z);
+        player.health.healthBar.value = player.health.maxHealth;
         player.movement.direction = "";
         tilePlacer.RestartGame();
     }
