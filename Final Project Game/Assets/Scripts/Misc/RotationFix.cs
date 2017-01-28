@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Fix sprite rotations so that they face the camera, making the world look 3D.
 public class RotationFix : MonoBehaviour {
     
     private void Start() {

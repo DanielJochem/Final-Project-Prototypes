@@ -7,16 +7,19 @@ public class EnemyMovement : MonoBehaviour {
     private Player player;
     private Enemy enemy;
 
-    [HideInInspector]
+    [HideInInspector] //References to the horizontal and vertical tile amounts.
     public int xTilesAmount, yTilesAmount;
     
+    //The tile the enemy spawns on.
     public int currentTileNumber;
 
+    //For checking what moves are vallid and invalid each turn.
     public List<string> illegalMoves, acceptableMoves;
 
-    [SerializeField]
+    [SerializeField] //The 8 total directions.
     private List<string> directions;
 
+    //For checking if player is in a tile the enemy can attack in.
     private bool attackThisTurn;
 
 
@@ -28,8 +31,10 @@ public class EnemyMovement : MonoBehaviour {
 
 
     public void EnemyMovementLogic() {
+        //Check for the player's and all other enemy's current tile. This prevents enemies stacking on top of each other and/or the player.
         PlayerAndEnemyLocationChecker();
 
+        //If player is in a tile the enemy can attack in,
         if(attackThisTurn) {
             //Don't move, instead attack!
             enemy.Attack();
@@ -39,7 +44,7 @@ public class EnemyMovement : MonoBehaviour {
             //Continue checking for movement directions
             CheckBoundaries();
 
-            //All checks are done, now the Enemy can move!
+            //All checks are done, now the Enemy can pick a direction to move in!
             MovementCheckerAndMove();
         }
         
@@ -48,28 +53,33 @@ public class EnemyMovement : MonoBehaviour {
     }
 
 
+    //Checks to see if the Player or any other enemies are in the tile the current enemy wants to move to.
     void PlayerAndEnemyLocationChecker() {
         //Up
-        //If Player is not in wantedPosition
+        //If Player is not in the enemy's wantedPosition,
         if(player.movement.currentTileNumber != currentTileNumber - xTilesAmount) {
-            //If no Enemy is in that position
+            //Check all other enemy's positions,
             foreach(GameObject enemy in turnHandler.enemyList) {
+                //If another enemy is in that position,
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber - xTilesAmount) {
+                    //It is an illegal movement (no stacking enemies on top of each other).
                     illegalMoves.Add("Up");
                 }
             }
-        } else {
+        } else { //Player is in the current enemy's wantedPosition,
             //Attack, don't move
             //print("Enemy Attacked Up");
             attackThisTurn = true;
         }
 
         //UpRight
-        //If Player is not in wantedPosition
+        //If Player is not in the enemy's wantedPosition,
         if(player.movement.currentTileNumber != currentTileNumber - (xTilesAmount - 1)) {
-            //If no Enemy is in that position
+            //Check all other enemy's positions,
             foreach(GameObject enemy in turnHandler.enemyList) {
+                //If another enemy is in that position,
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber - (xTilesAmount - 1)) {
+                    //It is an illegal movement (no stacking enemies on top of each other).
                     illegalMoves.Add("UpRight");
                 }
             }
@@ -80,11 +90,13 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         //Right
-        //If Player is not in wantedPosition
+        //If Player is not in the enemy's wantedPosition,
         if(player.movement.currentTileNumber != currentTileNumber + 1) {
-            //If no Enemy is in that position
+            //Check all other enemy's positions,
             foreach(GameObject enemy in turnHandler.enemyList) {
+                //If another enemy is in that position,
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber + 1) {
+                    //It is an illegal movement (no stacking enemies on top of each other).
                     illegalMoves.Add("Right");
                 }
             }
@@ -95,11 +107,13 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         //DownRight
-        //If Player is not in wantedPosition
+        //If Player is not in the enemy's wantedPosition,
         if(player.movement.currentTileNumber != currentTileNumber + (xTilesAmount + 1)) {
-            //If no Enemy is in that position
+            //Check all other enemy's positions,
             foreach(GameObject enemy in turnHandler.enemyList) {
+                //If another enemy is in that position,
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber + (xTilesAmount + 1)) {
+                    //It is an illegal movement (no stacking enemies on top of each other).
                     illegalMoves.Add("DownRight");
                 }
             }
@@ -110,11 +124,13 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         //Down
-        //If Player is not in wantedPosition
+        //If Player is not in the enemy's wantedPosition,
         if(player.movement.currentTileNumber != currentTileNumber + xTilesAmount) {
-            //If no Enemy is in that position
+            //Check all other enemy's positions,
             foreach(GameObject enemy in turnHandler.enemyList) {
+                //If another enemy is in that position,
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber + xTilesAmount) {
+                    //It is an illegal movement (no stacking enemies on top of each other).
                     illegalMoves.Add("Down");
                 }
             }
@@ -125,11 +141,13 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         //DownLeft
-        //If Player is not in wantedPosition
+        //If Player is not in the enemy's wantedPosition,
         if(player.movement.currentTileNumber != currentTileNumber + (xTilesAmount - 1)) {
-            //If no Enemy is in that position
+            //Check all other enemy's positions,
             foreach(GameObject enemy in turnHandler.enemyList) {
+                //If another enemy is in that position,
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber + (xTilesAmount - 1)) {
+                    //It is an illegal movement (no stacking enemies on top of each other).
                     illegalMoves.Add("DownLeft");
                 }
             }
@@ -140,11 +158,13 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         //Left
-        //If Player is not in wantedPosition
+        //If Player is not in the enemy's wantedPosition,
         if(player.movement.currentTileNumber != currentTileNumber - 1) {
-            //If no Enemy is in that position
+            //Check all other enemy's positions,
             foreach(GameObject enemy in turnHandler.enemyList) {
+                //If another enemy is in that position,
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber - 1) {
+                    //It is an illegal movement (no stacking enemies on top of each other).
                     illegalMoves.Add("Left");
                 }
             }
@@ -155,11 +175,13 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         //UpLeft
-        //If Player is not in wantedPosition
+        //If Player is not in the enemy's wantedPosition,
         if(player.movement.currentTileNumber != currentTileNumber - (xTilesAmount + 1)) {
-            //If no Enemy is in that position
+            //Check all other enemy's positions,
             foreach(GameObject enemy in turnHandler.enemyList) {
+                //If another enemy is in that position,
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == currentTileNumber - (xTilesAmount + 1)) {
+                    //It is an illegal movement (no stacking enemies on top of each other).
                     illegalMoves.Add("UpLeft");
                 }
             }
@@ -171,6 +193,7 @@ public class EnemyMovement : MonoBehaviour {
     }
 
 
+    //We do not want enemies to go outside the boundaries of the map, so make moves illegal if they would put the enemy outside the tiles.
     void CheckBoundaries() {
         //Up
         if(currentTileNumber - xTilesAmount <= 0) {
@@ -217,6 +240,7 @@ public class EnemyMovement : MonoBehaviour {
     string RandomDirection() {
         int directionChoice = Random.Range(0, acceptableMoves.Count);
 
+        //DEBUG STUFF
         //string[] tempArray = acceptableMoves.ToArray();
         //string tempString = string.Join(", ", tempArray);
         //print("List of Available Moves: " + tempString);
@@ -228,6 +252,9 @@ public class EnemyMovement : MonoBehaviour {
     void MovementCheckerAndMove() {
         string moveDirection = "";
 
+        //This is slight fsckery, but it basically checks all possible moves against the illegalMoves
+        //and if it doesn't find the direction it is currently checking from the list of all possibe directions in the illegalMoves list,
+        //it must be an acceptable movement, so add it to the acceptableMoves list.
         foreach(string directionToCheck in directions) {
             bool directionFound = false;
             foreach(string badDirection in illegalMoves) {
@@ -242,19 +269,25 @@ public class EnemyMovement : MonoBehaviour {
             }
         }
 
+        //If after that, the acceptableMoves list has at least 1 item (direction),
         if(acceptableMoves.Count > 0) {
+            //Pick a random direction from the list.
             moveDirection = RandomDirection();
         }
 
+        //If the acceptableMoves list had at least 1 item (direction) in it, it chose a random direction from thelist to move in,
         if(moveDirection != "") {
+            //So move in that direction.
             Move(moveDirection);
         }
     }
 
 
+    //Movement logic for enemies.
     void Move(string direction) {
         //print("Enemy Moved");
 
+        //The direction that was randomly chosen from the list of acceptableMoves.
         switch(direction) {
             case "Up":
                 //Move Up

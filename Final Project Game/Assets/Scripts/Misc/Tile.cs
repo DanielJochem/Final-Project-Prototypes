@@ -4,6 +4,7 @@ public class Tile : MonoBehaviour {
     private Player player;
     private TurnHandler turnHandler;
 
+    //What number am I in the tileList?
 	public int listNum;
 
 
@@ -13,8 +14,9 @@ public class Tile : MonoBehaviour {
     }
 
 
+    //When tile is clicked on,
 	public void OnMouseUp() {
-        //Make sure we can't click ANY enemy on the board to attack (this long IF statement will only allow for closest tile in all 8 directions).
+        //Make sure we can't click ANY enemy on the board to attack (this long IF statement will only allow for closest tile in all 8 directions). Need to change for longer range attacks.
         if((player.movement.currentTileNumber - player.movement.xTilesAmount) == listNum                //Up
             || (player.movement.currentTileNumber - (player.movement.xTilesAmount - 1)) == listNum      //UpRight
             || (player.movement.currentTileNumber + 1) == listNum                                       //Right
@@ -24,6 +26,7 @@ public class Tile : MonoBehaviour {
             || (player.movement.currentTileNumber - 1) == listNum                                       //Left
             || (player.movement.currentTileNumber - (player.movement.xTilesAmount + 1)) == listNum) {   //UpLeft
 
+            //If there is an enemy on the tile we are clicking on, target the enemy and set the player mode to Attack instead of Move.
             foreach(GameObject enemy in turnHandler.enemyList) {
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == listNum) {
                     turnHandler.enemyToAttack = enemy;
@@ -32,9 +35,11 @@ public class Tile : MonoBehaviour {
             }
         }
 
+        //If there was no enemy on the clicked tile,
         if(!turnHandler.playerAttackInsteadOfMove) {
             if(player.movement.direction == "") {
                 //Debug.Log("I am List Number: " + listNum + ". My Position is: " + gameObject.transform.GetChild(0).GetChild(0).transform.position);
+                //Set the clicked tile as the wantedTile.
                 player.movement.wantedTileNumber = listNum;
             }
         }

@@ -33,9 +33,10 @@ public class PlayerMovement : MonoBehaviour {
     private bool canMoveTwoChoseToMoveOne;
     #endregion
 
+
     void Start() {
         turnHandler = FindObjectOfType<TurnHandler>();
-        timeDelay = turnHandler.timeDelay;
+        //timeDelay = turnHandler.timeDelay;
         //armourType = ArmourType.leather;
         armourTypeValue = (int)armourType;
         //Debug.Log("The current armour worn is: " + System.Enum.GetName(typeof(ArmourType), armourType));
@@ -43,22 +44,29 @@ public class PlayerMovement : MonoBehaviour {
 
 
     public void PlayerMovementLogic() {
+        //If the tile currently on is the wantedTile, reset the wantedTileNumber and the direction.
         if(currentTileNumber == wantedTileNumber) {
             wantedTileNumber = -1;
             direction = "";
         }
 
+        //If the Player has clicked on a tile they want to move to,
         if(wantedTileNumber != -1) {
-            if(!moveDelay) {
+            /***** NOTE: The stuff commented out with '/*' is for if we want to have delayed movement when moving two tiles in one turn (when wearing leather armour).*****/
+             
+            //If the time delay between moves counted down to 0,
+            /*if(!moveDelay) {*/
+                //If the Player is not currently on the wantedTile,
                 if(currentTileNumber != wantedTileNumber) {
+                    //Move.
                     Move();
-                    moveDelay = true;
+                    /*moveDelay = true;*/
                 } else {
                     wantedTileNumber = -1;
                 }
-            }
+            /*}*/
 
-            if(direction != "") {
+            /*if(direction != "") {
                 if(timeDelay > 0.0f) {
                     timeDelay -= Time.deltaTime;
                 } else {
@@ -69,73 +77,90 @@ public class PlayerMovement : MonoBehaviour {
                 moveDelay = false;
             }
         } else {
-            timeDelay = turnHandler.timeDelay;
+            timeDelay = turnHandler.timeDelay; */
         }
     }
 
 
     public void Move() {
+        //If no current direction has been determined.
         if(direction == "") {
-            //Up                                                                           //All these OR conditions are to check if can move two in one turn but choose to move one.
+            //Up                                                                          //Player can move two in one turn but they choose to move only one.
             if(wantedTileNumber == (currentTileNumber - (xTilesAmount * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - xTilesAmount)) /*&& ((currentTileNumber - wantedTileNumber) % xTilesAmount == 0)*/) {
                 //Debug.Log("Up");
                 direction = "Up";
+
+                //Chose to move only one tile with leather armour on.
                 if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - xTilesAmount)) {
                     canMoveTwoChoseToMoveOne = true;
                 }
 
-            //Left
+            //Left                                                                     //Player can move two in one turn but they choose to move only one.
             } else if((wantedTileNumber == (currentTileNumber - (1 * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - 1))) && (Mathf.CeilToInt((float)currentTileNumber / (float)xTilesAmount) == (Mathf.CeilToInt((float)wantedTileNumber / (float)xTilesAmount))) /*&& !(wantedTileNumber % xTilesAmount == 0)*/) {
                 //Debug.Log("Left");
                 direction = "Left";
+
+                //Chose to move only one tile with leather armour on.
                 if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - 1)) {
                     canMoveTwoChoseToMoveOne = true;
                 }
 
-                //Right
+                //Right                                                                //Player can move two in one turn but they choose to move only one.
             } else if((wantedTileNumber == (currentTileNumber + (1 * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + 1))) && (Mathf.CeilToInt((float)currentTileNumber / (float)xTilesAmount) == (Mathf.CeilToInt((float)wantedTileNumber / (float)xTilesAmount))) /*&& !((wantedTileNumber - 1.0f) % xTilesAmount == 0)*/) {
                 //Debug.Log("Right");
                 direction = "Right";
+
+                //Chose to move only one tile with leather armour on.
                 if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + 1)) {
                     canMoveTwoChoseToMoveOne = true;
                 }
 
-                //Down
+                //Down                                                                           //Player can move two in one turn but they choose to move only one.
             } else if(wantedTileNumber == (currentTileNumber + (xTilesAmount * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + xTilesAmount)) /*&& ((wantedTileNumber - currentTileNumber) % xTilesAmount == 0)*/) {
                 //Debug.Log("Down");
                 direction = "Down";
+
+                //Chose to move only one tile with leather armour on.
                 if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + xTilesAmount)) {
                     canMoveTwoChoseToMoveOne = true;
                 }
 
-                //DownRight                                                                                                                                                                                                                                             //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
+                //DownRight                                                                            //Player can move two in one turn but they choose to move only one.                                                                                                                                                                                                                           //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
             } else if(wantedTileNumber == (currentTileNumber + ((xTilesAmount + 1) * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + (xTilesAmount + 1))) /*&& ((wantedTileNumber - currentTileNumber) % (xTilesAmount + 1) == 0) && (wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4))*/) {                    // || wantedTileNumber - currentTileNumber != ((xTilesAmount + 1) * 4))) { //&& wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4) || wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4)) {
                 //Debug.Log("DownRight");
                 direction = "DownRight";
+
+                //Chose to move only one tile with leather armour on.
                 if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + (xTilesAmount + 1))) {
                     canMoveTwoChoseToMoveOne = true;
                 }
 
-                //DownLeft
+                //DownLeft                                                                             //Player can move two in one turn but they choose to move only one.
             } else if(wantedTileNumber == (currentTileNumber + ((xTilesAmount - 1) * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + (xTilesAmount - 1))) /*&& ((wantedTileNumber - currentTileNumber) % (xTilesAmount - 1) == 0)*/) {
                 //Debug.Log("DownLeft");
                 direction = "DownLeft";
+
+                //Chose to move only one tile with leather armour on.
                 if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + (xTilesAmount - 1))) {
                     canMoveTwoChoseToMoveOne = true;
                 }
 
-                //UpLeft                                                                                                                                                                                                     //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
+                //UpLeft                                                                               //Player can move two in one turn but they choose to move only one.                                                                                                                                                                                            //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
             } else if(wantedTileNumber == (currentTileNumber - ((xTilesAmount + 1) * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - (xTilesAmount + 1))) /*&& ((currentTileNumber - wantedTileNumber) % (xTilesAmount + 1) == 0) && (currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 3))*/) {                    // || currentTileNumber - wantedTileNumber != ((xTilesAmount - 1) * 3))) { //&& currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 3) || currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 4)) {
                 //Debug.Log("UpLeft");
                 direction = "UpLeft";
+
+                //Chose to move only one tile with leather armour on.
                 if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - (xTilesAmount + 1))) {
                     canMoveTwoChoseToMoveOne = true;
                 }
 
-                //UpRight
+                //UpRight                                                                              //Player can move two in one turn but they choose to move only one.
             } else if(wantedTileNumber == (currentTileNumber - ((xTilesAmount - 1) * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - (xTilesAmount - 1))) /*&& ((currentTileNumber - wantedTileNumber) % (xTilesAmount - 1) == 0)*/) {
                 //Debug.Log("UpRight");
                 direction = "UpRight";
+
+                //Chose to move only one tile with leather armour on.
                 if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - (xTilesAmount - 1))) {
                     canMoveTwoChoseToMoveOne = true;
                 }
@@ -147,96 +172,123 @@ public class PlayerMovement : MonoBehaviour {
         }
 
 
+        //This is the logic to actually move in the chosen direction.
         if(direction == "Up") {
+            //If chose to move only one tile with leather armour on.
             if(canMoveTwoChoseToMoveOne) {
                 currentTileNumber -= xTilesAmount;
                 gameObject.transform.position += new Vector3(0, 1, 0);
                 canMoveTwoChoseToMoveOne = false;
-            } else {
+
+            } else { //Move the amount the currently worn armour type allows you to move.
                 currentTileNumber -= xTilesAmount * armourTypeValue;
                 gameObject.transform.position += new Vector3(0, 1 * armourTypeValue, 0);
             }
+
             turnHandler.turnNumber++;
 
         } else if(direction == "UpRight") {
+            //If chose to move only one tile with leather armour on.
             if(canMoveTwoChoseToMoveOne) {
                 currentTileNumber -= xTilesAmount - 1;
                 gameObject.transform.position += new Vector3(1, 1, 0);
                 canMoveTwoChoseToMoveOne = false;
-            } else {
+
+            } else { //Move the amount the currently worn armour type allows you to move.
                 currentTileNumber -= (xTilesAmount - 1) * armourTypeValue;
                 gameObject.transform.position += new Vector3(1 * armourTypeValue, 1 * armourTypeValue, 0);
             }
+
             turnHandler.turnNumber++;
 
         } else if(direction == "Right") {
+            //If chose to move only one tile with leather armour on.
             if(canMoveTwoChoseToMoveOne) {
                 currentTileNumber += 1;
                 gameObject.transform.position += new Vector3(1, 0, 0);
                 canMoveTwoChoseToMoveOne = false;
-            } else {
+
+            } else { //Move the amount the currently worn armour type allows you to move.
                 currentTileNumber += 1 * armourTypeValue;
                 gameObject.transform.position += new Vector3(1 * armourTypeValue, 0, 0);
             }
+
             turnHandler.turnNumber++;
 
         } else if(direction == "DownRight") {
+            //If chose to move only one tile with leather armour on.
             if(canMoveTwoChoseToMoveOne) {
                 currentTileNumber += (xTilesAmount + 1);
                 gameObject.transform.position += new Vector3(1, -1, 0);
                 canMoveTwoChoseToMoveOne = false;
-            } else {
+
+            } else { //Move the amount the currently worn armour type allows you to move.
                 currentTileNumber += (xTilesAmount + 1) * armourTypeValue;
                 gameObject.transform.position += new Vector3(1 * armourTypeValue, -1 * armourTypeValue, 0);
             }
+
             turnHandler.turnNumber++;
 
         } else if(direction == "Down") {
+            //If chose to move only one tile with leather armour on.
             if(canMoveTwoChoseToMoveOne) {
                 currentTileNumber += xTilesAmount;
                 gameObject.transform.position += new Vector3(0, -1, 0);
                 canMoveTwoChoseToMoveOne = false;
-            } else {
+
+            } else { //Move the amount the currently worn armour type allows you to move.
                 currentTileNumber += xTilesAmount * armourTypeValue;
                 gameObject.transform.position += new Vector3(0, -1 * armourTypeValue, 0);
             }
+
             turnHandler.turnNumber++;
 
         } else if(direction == "DownLeft") {
+            //If chose to move only one tile with leather armour on.
             if(canMoveTwoChoseToMoveOne) {
                 currentTileNumber += (xTilesAmount - 1);
                 gameObject.transform.position += new Vector3(-1, -1, 0);
                 canMoveTwoChoseToMoveOne = false;
-            } else {
+
+            } else { //Move the amount the currently worn armour type allows you to move.
                 currentTileNumber += (xTilesAmount - 1) * armourTypeValue;
                 gameObject.transform.position += new Vector3(-1 * armourTypeValue, -1 * armourTypeValue, 0);
             }
+
             turnHandler.turnNumber++;
 
         } else if(direction == "Left") {
+            //If chose to move only one tile with leather armour on.
             if(canMoveTwoChoseToMoveOne) {
                 currentTileNumber -= 1;
                 gameObject.transform.position += new Vector3(-1, 0, 0);
                 canMoveTwoChoseToMoveOne = false;
-            } else {
+
+            } else { //Move the amount the currently worn armour type allows you to move.
                 currentTileNumber -= 1 * armourTypeValue;
                 gameObject.transform.position += new Vector3(-1 * armourTypeValue, 0, 0);
             }
+
             turnHandler.turnNumber++;
 
         } else if(direction == "UpLeft") {
+            //If chose to move only one tile with leather armour on.
             if(canMoveTwoChoseToMoveOne) {
                 currentTileNumber -= (xTilesAmount + 1);
                 gameObject.transform.position += new Vector3(-1, 1, 0);
                 canMoveTwoChoseToMoveOne = false;
-            } else {
+
+            } else { //Move the amount the currently worn armour type allows you to move.
                 currentTileNumber -= (xTilesAmount + 1) * armourTypeValue;
                 gameObject.transform.position += new Vector3(-1 * armourTypeValue, 1 * armourTypeValue, 0);
             }
+
             turnHandler.turnNumber++;
         }
     }
 
+
+    //If the armour type is changed, this is a nice little method to call.
     int ChangeArmourTypeTo(ArmourType armour) {
         return (int)armour;
     }
