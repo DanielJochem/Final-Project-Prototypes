@@ -291,12 +291,17 @@ Prefab:
     - target: {fileID: 224201774370008944, guid: 4c750578ea80e974c850b32a61f9b7be,
         type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224201774370008944, guid: 4c750578ea80e974c850b32a61f9b7be,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000012087209752, guid: 4c750578ea80e974c850b32a61f9b7be,
+        type: 2}
+      propertyPath: armourType
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4c750578ea80e974c850b32a61f9b7be, type: 2}

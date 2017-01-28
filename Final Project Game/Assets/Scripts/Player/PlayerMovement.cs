@@ -29,6 +29,8 @@ public class PlayerMovement : MonoBehaviour {
 
     [HideInInspector]
     public string direction = "";
+
+    private bool canMoveTwoChoseToMoveOne;
     #endregion
 
     void Start() {
@@ -74,45 +76,69 @@ public class PlayerMovement : MonoBehaviour {
 
     public void Move() {
         if(direction == "") {
-            //Up
-            if(wantedTileNumber == (currentTileNumber - (xTilesAmount * armourTypeValue)) /*&& ((currentTileNumber - wantedTileNumber) % xTilesAmount == 0)*/) {
+            //Up                                                                           //All these OR conditions are to check if can move two in one turn but choose to move one.
+            if(wantedTileNumber == (currentTileNumber - (xTilesAmount * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - xTilesAmount)) /*&& ((currentTileNumber - wantedTileNumber) % xTilesAmount == 0)*/) {
                 //Debug.Log("Up");
                 direction = "Up";
+                if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - xTilesAmount)) {
+                    canMoveTwoChoseToMoveOne = true;
+                }
 
             //Left
-            } else if(wantedTileNumber == (currentTileNumber - (1 * armourTypeValue)) && (Mathf.CeilToInt((float)currentTileNumber / (float)xTilesAmount) == (Mathf.CeilToInt((float)wantedTileNumber / (float)xTilesAmount))) /*&& !(wantedTileNumber % xTilesAmount == 0)*/) {
+            } else if((wantedTileNumber == (currentTileNumber - (1 * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - 1))) && (Mathf.CeilToInt((float)currentTileNumber / (float)xTilesAmount) == (Mathf.CeilToInt((float)wantedTileNumber / (float)xTilesAmount))) /*&& !(wantedTileNumber % xTilesAmount == 0)*/) {
                 //Debug.Log("Left");
                 direction = "Left";
+                if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - 1)) {
+                    canMoveTwoChoseToMoveOne = true;
+                }
 
-            //Right
-            } else if(wantedTileNumber == (currentTileNumber + (1 * armourTypeValue)) && (Mathf.CeilToInt((float)currentTileNumber / (float)xTilesAmount) == (Mathf.CeilToInt((float)wantedTileNumber / (float)xTilesAmount))) /*&& !((wantedTileNumber - 1.0f) % xTilesAmount == 0)*/) {
+                //Right
+            } else if((wantedTileNumber == (currentTileNumber + (1 * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + 1))) && (Mathf.CeilToInt((float)currentTileNumber / (float)xTilesAmount) == (Mathf.CeilToInt((float)wantedTileNumber / (float)xTilesAmount))) /*&& !((wantedTileNumber - 1.0f) % xTilesAmount == 0)*/) {
                 //Debug.Log("Right");
                 direction = "Right";
+                if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + 1)) {
+                    canMoveTwoChoseToMoveOne = true;
+                }
 
-            //Down
-            } else if(wantedTileNumber == (currentTileNumber + (xTilesAmount * armourTypeValue)) /*&& ((wantedTileNumber - currentTileNumber) % xTilesAmount == 0)*/) {
+                //Down
+            } else if(wantedTileNumber == (currentTileNumber + (xTilesAmount * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + xTilesAmount)) /*&& ((wantedTileNumber - currentTileNumber) % xTilesAmount == 0)*/) {
                 //Debug.Log("Down");
                 direction = "Down";
+                if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + xTilesAmount)) {
+                    canMoveTwoChoseToMoveOne = true;
+                }
 
-            //DownRight                                                                                                                                                                                                                                             //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
-            } else if(wantedTileNumber == (currentTileNumber + ((xTilesAmount + 1) * armourTypeValue)) /*&& ((wantedTileNumber - currentTileNumber) % (xTilesAmount + 1) == 0) && (wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4))*/) {                    // || wantedTileNumber - currentTileNumber != ((xTilesAmount + 1) * 4))) { //&& wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4) || wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4)) {
+                //DownRight                                                                                                                                                                                                                                             //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
+            } else if(wantedTileNumber == (currentTileNumber + ((xTilesAmount + 1) * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + (xTilesAmount + 1))) /*&& ((wantedTileNumber - currentTileNumber) % (xTilesAmount + 1) == 0) && (wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4))*/) {                    // || wantedTileNumber - currentTileNumber != ((xTilesAmount + 1) * 4))) { //&& wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4) || wantedTileNumber - currentTileNumber != ((xTilesAmount - 1) * 4)) {
                 //Debug.Log("DownRight");
                 direction = "DownRight";
+                if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + (xTilesAmount + 1))) {
+                    canMoveTwoChoseToMoveOne = true;
+                }
 
-            //DownLeft
-            } else if(wantedTileNumber == (currentTileNumber + ((xTilesAmount - 1) * armourTypeValue)) /*&& ((wantedTileNumber - currentTileNumber) % (xTilesAmount - 1) == 0)*/) {
+                //DownLeft
+            } else if(wantedTileNumber == (currentTileNumber + ((xTilesAmount - 1) * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + (xTilesAmount - 1))) /*&& ((wantedTileNumber - currentTileNumber) % (xTilesAmount - 1) == 0)*/) {
                 //Debug.Log("DownLeft");
                 direction = "DownLeft";
+                if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber + (xTilesAmount - 1))) {
+                    canMoveTwoChoseToMoveOne = true;
+                }
 
-            //UpLeft                                                                                                                                                                                                     //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
-            } else if(wantedTileNumber == (currentTileNumber - ((xTilesAmount + 1) * armourTypeValue)) /*&& ((currentTileNumber - wantedTileNumber) % (xTilesAmount + 1) == 0) && (currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 3))*/) {                    // || currentTileNumber - wantedTileNumber != ((xTilesAmount - 1) * 3))) { //&& currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 3) || currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 4)) {
+                //UpLeft                                                                                                                                                                                                     //<-- Up to this point uncommented, the problem is with DR and UL 3        //<-- Up to this point uncommented, the problem is with DL and UR 4        //The rest uncommented, the problem is with DR and UL 4 (I think)
+            } else if(wantedTileNumber == (currentTileNumber - ((xTilesAmount + 1) * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - (xTilesAmount + 1))) /*&& ((currentTileNumber - wantedTileNumber) % (xTilesAmount + 1) == 0) && (currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 3))*/) {                    // || currentTileNumber - wantedTileNumber != ((xTilesAmount - 1) * 3))) { //&& currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 3) || currentTileNumber - wantedTileNumber != ((xTilesAmount + 1) * 4)) {
                 //Debug.Log("UpLeft");
                 direction = "UpLeft";
+                if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - (xTilesAmount + 1))) {
+                    canMoveTwoChoseToMoveOne = true;
+                }
 
-            //UpRight
-            } else if(wantedTileNumber == (currentTileNumber - ((xTilesAmount - 1) * armourTypeValue)) /*&& ((currentTileNumber - wantedTileNumber) % (xTilesAmount - 1) == 0)*/) {
+                //UpRight
+            } else if(wantedTileNumber == (currentTileNumber - ((xTilesAmount - 1) * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - (xTilesAmount - 1))) /*&& ((currentTileNumber - wantedTileNumber) % (xTilesAmount - 1) == 0)*/) {
                 //Debug.Log("UpRight");
                 direction = "UpRight";
+                if(armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - (xTilesAmount - 1))) {
+                    canMoveTwoChoseToMoveOne = true;
+                }
 
             } else {
                 wantedTileNumber = currentTileNumber;
@@ -122,36 +148,91 @@ public class PlayerMovement : MonoBehaviour {
 
 
         if(direction == "Up") {
-            currentTileNumber -= xTilesAmount * armourTypeValue;
-            gameObject.transform.position += new Vector3(0, 1 * armourTypeValue, 0);
+            if(canMoveTwoChoseToMoveOne) {
+                currentTileNumber -= xTilesAmount;
+                gameObject.transform.position += new Vector3(0, 1, 0);
+                canMoveTwoChoseToMoveOne = false;
+            } else {
+                currentTileNumber -= xTilesAmount * armourTypeValue;
+                gameObject.transform.position += new Vector3(0, 1 * armourTypeValue, 0);
+            }
             turnHandler.turnNumber++;
+
         } else if(direction == "UpRight") {
-            currentTileNumber -= (xTilesAmount - 1) * armourTypeValue;
-            gameObject.transform.position += new Vector3(1 * armourTypeValue, 1 * armourTypeValue, 0);
+            if(canMoveTwoChoseToMoveOne) {
+                currentTileNumber -= xTilesAmount - 1;
+                gameObject.transform.position += new Vector3(1, 1, 0);
+                canMoveTwoChoseToMoveOne = false;
+            } else {
+                currentTileNumber -= (xTilesAmount - 1) * armourTypeValue;
+                gameObject.transform.position += new Vector3(1 * armourTypeValue, 1 * armourTypeValue, 0);
+            }
             turnHandler.turnNumber++;
+
         } else if(direction == "Right") {
-            currentTileNumber += 1 * armourTypeValue;
-            gameObject.transform.position += new Vector3(1 * armourTypeValue, 0, 0);
+            if(canMoveTwoChoseToMoveOne) {
+                currentTileNumber += 1;
+                gameObject.transform.position += new Vector3(1, 0, 0);
+                canMoveTwoChoseToMoveOne = false;
+            } else {
+                currentTileNumber += 1 * armourTypeValue;
+                gameObject.transform.position += new Vector3(1 * armourTypeValue, 0, 0);
+            }
             turnHandler.turnNumber++;
+
         } else if(direction == "DownRight") {
-            currentTileNumber += (xTilesAmount + 1) * armourTypeValue;
-            gameObject.transform.position += new Vector3(1 * armourTypeValue, -1 * armourTypeValue, 0);
+            if(canMoveTwoChoseToMoveOne) {
+                currentTileNumber += (xTilesAmount + 1);
+                gameObject.transform.position += new Vector3(1, -1, 0);
+                canMoveTwoChoseToMoveOne = false;
+            } else {
+                currentTileNumber += (xTilesAmount + 1) * armourTypeValue;
+                gameObject.transform.position += new Vector3(1 * armourTypeValue, -1 * armourTypeValue, 0);
+            }
             turnHandler.turnNumber++;
+
         } else if(direction == "Down") {
-            currentTileNumber += xTilesAmount * armourTypeValue;
-            gameObject.transform.position += new Vector3(0, -1 * armourTypeValue, 0);
+            if(canMoveTwoChoseToMoveOne) {
+                currentTileNumber += xTilesAmount;
+                gameObject.transform.position += new Vector3(0, -1, 0);
+                canMoveTwoChoseToMoveOne = false;
+            } else {
+                currentTileNumber += xTilesAmount * armourTypeValue;
+                gameObject.transform.position += new Vector3(0, -1 * armourTypeValue, 0);
+            }
             turnHandler.turnNumber++;
+
         } else if(direction == "DownLeft") {
-            currentTileNumber += (xTilesAmount - 1) * armourTypeValue;
-            gameObject.transform.position += new Vector3(-1 * armourTypeValue, -1 * armourTypeValue, 0);
+            if(canMoveTwoChoseToMoveOne) {
+                currentTileNumber += (xTilesAmount - 1);
+                gameObject.transform.position += new Vector3(-1, -1, 0);
+                canMoveTwoChoseToMoveOne = false;
+            } else {
+                currentTileNumber += (xTilesAmount - 1) * armourTypeValue;
+                gameObject.transform.position += new Vector3(-1 * armourTypeValue, -1 * armourTypeValue, 0);
+            }
             turnHandler.turnNumber++;
+
         } else if(direction == "Left") {
-            currentTileNumber -= 1 * armourTypeValue;
-            gameObject.transform.position += new Vector3(-1 * armourTypeValue, 0, 0);
+            if(canMoveTwoChoseToMoveOne) {
+                currentTileNumber -= 1;
+                gameObject.transform.position += new Vector3(-1, 0, 0);
+                canMoveTwoChoseToMoveOne = false;
+            } else {
+                currentTileNumber -= 1 * armourTypeValue;
+                gameObject.transform.position += new Vector3(-1 * armourTypeValue, 0, 0);
+            }
             turnHandler.turnNumber++;
+
         } else if(direction == "UpLeft") {
-            currentTileNumber -= (xTilesAmount + 1) * armourTypeValue;
-            gameObject.transform.position += new Vector3(-1 * armourTypeValue, 1 * armourTypeValue, 0);
+            if(canMoveTwoChoseToMoveOne) {
+                currentTileNumber -= (xTilesAmount + 1);
+                gameObject.transform.position += new Vector3(-1, 1, 0);
+                canMoveTwoChoseToMoveOne = false;
+            } else {
+                currentTileNumber -= (xTilesAmount + 1) * armourTypeValue;
+                gameObject.transform.position += new Vector3(-1 * armourTypeValue, 1 * armourTypeValue, 0);
+            }
             turnHandler.turnNumber++;
         }
     }
