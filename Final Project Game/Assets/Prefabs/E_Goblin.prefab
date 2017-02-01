@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 114000010549256062}
   - component: {fileID: 114000012004571490}
   - component: {fileID: 114550985815160076}
+  - component: {fileID: 114146567399983274}
   m_Layer: 0
   m_Name: E_Goblin
   m_TagString: Enemy
@@ -212,6 +213,34 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114146567399983274
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011901657510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb854dd12d044c245802be10823e24ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentTileNumber: 0
+  xTilesAmount: 0
+  yTilesAmount: 0
+  enemyAttackablePositions:
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  - positions: {x: 0, y: 0}
+  enemyAttackableTiles: []
 --- !u!114 &114182644191718322
 MonoBehaviour:
   m_ObjectHideFlags: 1

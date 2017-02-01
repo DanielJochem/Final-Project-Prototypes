@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114956604288303720}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d9a3f5bc4bd8e744a4cfdc81b5b5896, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armourType: 1
+  armourType: 2
   xTilesAmount: 7
   currentTileNumber: 8
   wantedTileNumber: -1

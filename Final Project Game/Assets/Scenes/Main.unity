@@ -298,11 +298,6 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114000012087209752, guid: 4c750578ea80e974c850b32a61f9b7be,
-        type: 2}
-      propertyPath: armourType
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4c750578ea80e974c850b32a61f9b7be, type: 2}
   m_IsPrefabParent: 0
@@ -515,22 +510,22 @@ MonoBehaviour:
   yTiles: 7
   tileSize: 1
   enemiesWanted:
-  - enemyType: {fileID: 1000011901657510, guid: 945ddb916facf5249a4528fcc5060d30,
-      type: 2}
-    enemyAmount: 1
-  - enemyType: {fileID: 1000011901657510, guid: 52fc914c58a988a42b628378c055e8c6,
-      type: 2}
-    enemyAmount: 1
-  - enemyType: {fileID: 1000011901657510, guid: 11e19b734cc26d94fab577206f5cb754,
-      type: 2}
-    enemyAmount: 1
-  - enemyType: {fileID: 1000011901657510, guid: e15e9ec140df530448a265dc05c34164,
+  - enemyType: {fileID: 1000011901657510, guid: 67ebdc6a72a5f664d91c8178da385d25,
       type: 2}
     enemyAmount: 1
   - enemyType: {fileID: 1000011901657510, guid: 9cbb6ef344ee1d04683b59e1a2647c25,
       type: 2}
     enemyAmount: 1
-  - enemyType: {fileID: 1000011901657510, guid: 67ebdc6a72a5f664d91c8178da385d25,
+  - enemyType: {fileID: 1000011901657510, guid: e15e9ec140df530448a265dc05c34164,
+      type: 2}
+    enemyAmount: 1
+  - enemyType: {fileID: 1000011901657510, guid: 11e19b734cc26d94fab577206f5cb754,
+      type: 2}
+    enemyAmount: 1
+  - enemyType: {fileID: 1000011901657510, guid: 52fc914c58a988a42b628378c055e8c6,
+      type: 2}
+    enemyAmount: 1
+  - enemyType: {fileID: 1000011901657510, guid: 945ddb916facf5249a4528fcc5060d30,
       type: 2}
     enemyAmount: 1
   tiles: []
@@ -745,7 +740,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 163756398}
   tilePlacer: {fileID: 313542804}
-  timeDelay: 0.1
   turnNumber: 0
   wonGameUI: {fileID: 213087014}
   lostGameUI: {fileID: 1302518670}
@@ -955,7 +949,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb854dd12d044c245802be10823e24ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 163756398}
+  currentTileNumber: 0
+  xTilesAmount: 0
+  yTilesAmount: 0
+  enemyAttackablePositions: []
+  enemyAttackableTiles: []
 --- !u!114 &677105337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -967,6 +965,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd77bcdf21240646a1703ce69a64f17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attack: {fileID: 0}
+  movement: {fileID: 0}
+  turnHandler: {fileID: 0}
+  gridOfTiles: []
+  xTilesAmount: 0
+  yTilesAmount: 0
 --- !u!4 &677105338
 Transform:
   m_ObjectHideFlags: 0
