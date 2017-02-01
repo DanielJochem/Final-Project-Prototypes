@@ -6,6 +6,7 @@ public class EnemyHealth : MonoBehaviour {
     public Slider healthBar;
     private TurnHandler turnHandler;
     private Player player;
+    private Enemy enemy;
 
     public int health, looseHealthAmount, maxHealth;
 
@@ -13,6 +14,7 @@ public class EnemyHealth : MonoBehaviour {
     void Start() {
         turnHandler = FindObjectOfType<TurnHandler>();
         player = FindObjectOfType<Player>();
+        enemy = FindObjectOfType<Enemy>();
     }
 
 
@@ -39,7 +41,7 @@ public class EnemyHealth : MonoBehaviour {
         }*/
 
         if(health == 0) {
-            Debug.Log("Enemy Died");
+            //Debug.Log("Enemy Died");
 
             //Add health to the player.
             player.health.UpdateHealth(5);
@@ -50,6 +52,8 @@ public class EnemyHealth : MonoBehaviour {
                     turnHandler.enemyList.Remove(turnHandler.enemyList[i]);
                 }
             }
+
+            enemy.attack.EnemyRemoveAttackableTiles();
 
             //Destory the enemy.
             Destroy(gameObject);

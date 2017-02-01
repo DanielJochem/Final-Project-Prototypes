@@ -24,9 +24,12 @@ public class EnemyMovement : MonoBehaviour {
 
 
     void Start() {
-        turnHandler = FindObjectOfType<TurnHandler>();
         player = FindObjectOfType<Player>();
         enemy = FindObjectOfType<Enemy>();
+
+        turnHandler = enemy.turnHandler;
+        xTilesAmount = enemy.xTilesAmount;
+        yTilesAmount = enemy.yTilesAmount;
     }
 
 
@@ -330,5 +333,11 @@ public class EnemyMovement : MonoBehaviour {
                 currentTileNumber -= (xTilesAmount + 1);
                 break;
         }
+
+        //A new move has been made, which means the attackable tiles are now different, so clear the previous list of attackable tiles.
+        gameObject.GetComponent<EnemyAttack>().enemyAttackableTiles.Clear();
+
+        //Now we can calculate the new attackable tiles.
+        gameObject.GetComponent<EnemyAttack>().CalculateAttackableTiles();
     }
 }

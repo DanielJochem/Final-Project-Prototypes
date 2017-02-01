@@ -4,6 +4,8 @@ public class Tile : MonoBehaviour {
     private Player player;
     private TurnHandler turnHandler;
 
+    private GameObject currentlySelectedEnemy;
+
     //What number am I in the tileList?
 	public int listNum;
 
@@ -11,6 +13,17 @@ public class Tile : MonoBehaviour {
     void Start() {
         player = FindObjectOfType<Player>();
         turnHandler = FindObjectOfType<TurnHandler>();
+    }
+
+
+    //If an enemy was clicked on to see it's attackable tiles, show those tiles.
+    public void OnMouseDown() {
+        foreach(GameObject enemy in turnHandler.enemyList) {
+            if(enemy.GetComponent<EnemyMovement>().currentTileNumber == listNum) {
+                currentlySelectedEnemy = enemy;
+                enemy.GetComponent<EnemyAttack>().EnemyDisplayAttackableTiles();
+            }
+        }
     }
 
 
@@ -42,6 +55,12 @@ public class Tile : MonoBehaviour {
                 //Set the clicked tile as the wantedTile.
                 player.movement.wantedTileNumber = listNum;
             }
+        }
+
+        //De-Red-ify tiles if an enemy was clicked.
+        if(currentlySelectedEnemy != null) {
+            currentlySelectedEnemy.GetComponent<EnemyAttack>().EnemyRemoveAttackableTiles();
+            currentlySelectedEnemy = null;
         }
 	}
 }

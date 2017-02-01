@@ -5,6 +5,7 @@ using System.Collections.Generic;
 //This is kind of a GameManager script, but only for the setup for each level.
 public class TilePlacer : MonoBehaviour {
     private Player player;
+    private Enemy enemy;
     private TurnHandler turnHandler;
 
     private GameObject tileGridParent, enemiesParent;
@@ -33,10 +34,14 @@ public class TilePlacer : MonoBehaviour {
 
     void Start() {
         player = FindObjectOfType<Player>();
+        enemy = FindObjectOfType<Enemy>();
         turnHandler = FindObjectOfType<TurnHandler>();
         tileGridParent = GameObject.FindGameObjectWithTag("TileGrid");
         enemiesParent = GameObject.FindGameObjectWithTag("EnemiesParent");
-        
+
+        enemy.GetComponent<Enemy>().xTilesAmount = xTiles;
+        enemy.GetComponent<Enemy>().yTilesAmount = yTiles;
+
         PlaceTiles();
         SetUpPlayer();
         SetUpEnemies();
@@ -87,6 +92,8 @@ public class TilePlacer : MonoBehaviour {
             //End of a row? Next Y position and start form first X position again.
             currPos = new Vector3(xStartPos, currPos.y -= tileSize, 2);
         }
+
+        enemy.gridOfTiles = tiles;
     }
 
 
@@ -150,18 +157,18 @@ public class TilePlacer : MonoBehaviour {
                 //Set the position of the enemy onto the tile,
                 enemy.gameObject.transform.position = new Vector3(enemy.gameObject.transform.position.x, enemy.gameObject.transform.position.y, 1.5f);
 
-                //Give the eney ot's currentTileNumber,
+                //Give the enemy it's currentTileNumber,
                 enemy.GetComponent<EnemyMovement>().currentTileNumber = randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY;
-
-                //And pass the horizontal and vertical tile integers to the enemy, so it can calculate what it is allowed to move to.
-                enemy.GetComponent<EnemyMovement>().xTilesAmount = xTiles;
-                enemy.GetComponent<EnemyMovement>().yTilesAmount = yTiles;
+                //enemy.GetComponent<EnemyAttack>().currentTileNumber = randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY;
 
                 //Add the enemy to the enemyList.
                 enemyList.Add(enemy);
 
                 //Give the enemy a parent to go and cry to at night.
                 enemy.transform.SetParent(enemiesParent.transform);
+
+                //Calculate the enemy's attackable tiles.
+                enemy.GetComponent<EnemyAttack>().CalculateAttackableTiles();
             }
         }
 

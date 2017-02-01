@@ -44,7 +44,7 @@ public class TurnHandler : MonoBehaviour {
 
             //Turn logic for enemies.
             if(turnNumber > turnNumberSAVED && enemyList.Count > 0) {
-                foreach(GameObject enemy in enemyList) {
+                foreach(GameObject enemy in enemyList) { 
                     enemy.GetComponent<EnemyMovement>().EnemyMovementLogic();
                 }
 
