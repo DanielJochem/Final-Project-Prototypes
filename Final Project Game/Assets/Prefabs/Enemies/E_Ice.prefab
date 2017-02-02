@@ -362,19 +362,24 @@ MonoBehaviour:
   xTilesAmount: 0
   yTilesAmount: 0
   enemyAttackablePositions:
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
-  - positions: {x: 0, y: 0}
+  - positions: {x: -3, y: -3}
+  - positions: {x: 0, y: -3}
+  - positions: {x: 3, y: -3}
+  - positions: {x: -2, y: -2}
+  - positions: {x: 0, y: -2}
+  - positions: {x: 2, y: -2}
+  - positions: {x: -3, y: 0}
+  - positions: {x: -2, y: 0}
+  - positions: {x: 2, y: 0}
+  - positions: {x: 3, y: 0}
+  - positions: {x: -2, y: 2}
+  - positions: {x: 0, y: 2}
+  - positions: {x: 2, y: 2}
+  - positions: {x: -3, y: 3}
+  - positions: {x: 0, y: 3}
+  - positions: {x: 3, y: 3}
   enemyAttackableTiles: []
+  tilesShown: 0
 --- !u!212 &212000013289528250
 SpriteRenderer:
   m_ObjectHideFlags: 1

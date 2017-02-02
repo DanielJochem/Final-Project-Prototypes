@@ -19,7 +19,8 @@ public class EnemyAttack : MonoBehaviour {
     private Color purple = new Color(0.5568f, 0.0156f, 0.8902f);
     private Color red = Color.red;
 
-    private bool shownTiles;
+    [HideInInspector]
+    public bool tilesShown;
 
 
     //Has to be Awake() otherwise xTilesAmount isn't set before CalculateAttackableTiles() is run.
@@ -33,8 +34,18 @@ public class EnemyAttack : MonoBehaviour {
 
 
     //Just for debug showing which enemy you clicked on.
-    public void ClickedEnemy() {
-        Debug.Log(gameObject.name);
+    //public void ClickedEnemy() {
+    //    Debug.Log(gameObject.name);
+    //}
+
+
+    public bool CheckCanAttackPlayer() {
+        foreach(GameObject attackableTile in enemyAttackableTiles) {
+            if(player.movement.currentTileNumber == attackableTile.GetComponent<Tile>().listNum) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -46,13 +57,13 @@ public class EnemyAttack : MonoBehaviour {
 
     public void EnemyDisplayAttackableTiles() {
         //For debug, show what enemy was clicked on.
-        ClickedEnemy();
+        //ClickedEnemy();
 
         foreach(GameObject attackableTile in enemyAttackableTiles) {
             attackableTile.GetComponent<SpriteRenderer>().color = red;
         }
 
-        //shownTiles = true;
+        tilesShown = true;
     }
 
 
@@ -61,7 +72,7 @@ public class EnemyAttack : MonoBehaviour {
             attackableTile.GetComponent<SpriteRenderer>().color = purple;
         }
 
-        //shownTiles = false;
+        tilesShown = false;
     }
 
 
@@ -73,8 +84,8 @@ public class EnemyAttack : MonoBehaviour {
                 GameObject tempTile;
 
                 //For some unknown reason, it starts calculating enemy attackable tiles one tile to the right of the enemy, so I had to go "currentTileNumber - 1".
-                if(((currentTileNumber - 1) + ((int)position.positions.x + ((int)position.positions.y * xTilesAmount)) < 1) //If the calculated tile number is less than 1 (handles Up tiles).
-                    || ((currentTileNumber - 1) + ((int)position.positions.x + ((int)position.positions.y * xTilesAmount)) > xTilesAmount * yTilesAmount) //If the calculated tile number is greater than the last tile (handles Down tiles).
+                if(((currentTileNumber - 1) + ((int)position.positions.x + ((int)position.positions.y * xTilesAmount)) < (1 - 1)) //If the calculated tile number is less than 1 (handles Up tiles).
+                    || ((currentTileNumber - 1) + ((int)position.positions.x + ((int)position.positions.y * xTilesAmount)) > (xTilesAmount * yTilesAmount) - 1) //If the calculated tile number is greater than the last tile (handles Down tiles).
                     || Mathf.CeilToInt(((currentTileNumber - 1) + (int)position.positions.x) / xTilesAmount) != Mathf.CeilToInt((currentTileNumber - 1) / xTilesAmount)) //If the calculated tile number is not on the same row as the enemy (handles Left and Right tiles).
                 {
                     continue;

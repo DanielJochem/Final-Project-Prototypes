@@ -181,6 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listNum: 0
+  timer: 2
 --- !u!212 &212000012439846396
 SpriteRenderer:
   m_ObjectHideFlags: 1

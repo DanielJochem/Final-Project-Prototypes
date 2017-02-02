@@ -22,9 +22,9 @@ public class PlayerMovement : MonoBehaviour {
 
     //[HideInInspector]
     public int currentTileNumber = -1, wantedTileNumber = -1;
-    
+
     private bool moveDelay;
-    
+
     private float timeDelay;
 
     [HideInInspector]
@@ -53,17 +53,30 @@ public class PlayerMovement : MonoBehaviour {
         //If the Player has clicked on a tile they want to move to,
         if(wantedTileNumber != -1) {
             /***** NOTE: The stuff commented out with '/*' is for if we want to have delayed movement when moving two tiles in one turn (when wearing leather armour).*****/
-             
+
             //If the time delay between moves counted down to 0,
             /*if(!moveDelay) {*/
-                //If the Player is not currently on the wantedTile,
-                if(currentTileNumber != wantedTileNumber) {
+            //If the Player is not currently on the wantedTile,
+            if(currentTileNumber != wantedTileNumber) {
+                bool enemyInWantedPosition = false;
+                if(turnHandler.enemyList.Count > 0) {
+                    foreach(GameObject enemyCheck in turnHandler.enemyList) {
+                        if(enemyCheck.GetComponent<EnemyMovement>().currentTileNumber == wantedTileNumber) {
+                            enemyInWantedPosition = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(!enemyInWantedPosition) {
                     //Move.
                     Move();
                     /*moveDelay = true;*/
-                } else {
-                    wantedTileNumber = -1;
                 }
+
+            } else {
+                wantedTileNumber = -1;
+            }
             /*}*/
 
             /*if(direction != "") {
@@ -95,7 +108,7 @@ public class PlayerMovement : MonoBehaviour {
                     canMoveTwoChoseToMoveOne = true;
                 }
 
-            //Left                                                                     //Player can move two in one turn but they choose to move only one.
+                //Left                                                                     //Player can move two in one turn but they choose to move only one.
             } else if((wantedTileNumber == (currentTileNumber - (1 * armourTypeValue)) || (armourType == ArmourType.leather && wantedTileNumber == (currentTileNumber - 1))) && (Mathf.CeilToInt((float)currentTileNumber / (float)xTilesAmount) == (Mathf.CeilToInt((float)wantedTileNumber / (float)xTilesAmount))) /*&& !(wantedTileNumber % xTilesAmount == 0)*/) {
                 //Debug.Log("Left");
                 direction = "Left";

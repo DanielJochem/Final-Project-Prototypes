@@ -14,14 +14,21 @@ public class Enemy : MonoBehaviour {
     [HideInInspector]
     public List<GameObject> gridOfTiles;
 
+    #region Reference Holders for other Enemy scripts.
     [HideInInspector]
     public int xTilesAmount, yTilesAmount;
+
+    [HideInInspector]
+    public GameObject currentlySelectedEnemy;
+    public bool enemySwapped, currentSelectedEnemyIsDead;
+    #endregion
 
 
     void Start() {
         turnHandler = FindObjectOfType<TurnHandler>();
         attack = FindObjectOfType<EnemyAttack>();
         movement = FindObjectOfType<EnemyMovement>();
+        currentlySelectedEnemy = null;
     }
 
 

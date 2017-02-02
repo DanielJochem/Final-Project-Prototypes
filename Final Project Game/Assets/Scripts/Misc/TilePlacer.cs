@@ -159,7 +159,6 @@ public class TilePlacer : MonoBehaviour {
 
                 //Give the enemy it's currentTileNumber,
                 enemy.GetComponent<EnemyMovement>().currentTileNumber = randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY;
-                //enemy.GetComponent<EnemyAttack>().currentTileNumber = randomTileToSpawnOnEnemyX * randomTileToSpawnOnEnemyY;
 
                 //Add the enemy to the enemyList.
                 enemyList.Add(enemy);

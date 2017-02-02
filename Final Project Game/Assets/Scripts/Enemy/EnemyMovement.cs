@@ -36,6 +36,7 @@ public class EnemyMovement : MonoBehaviour {
     public void EnemyMovementLogic() {
         //Check for the player's and all other enemy's current tile. This prevents enemies stacking on top of each other and/or the player.
         PlayerAndEnemyLocationChecker();
+        attackThisTurn = gameObject.GetComponent<EnemyAttack>().CheckCanAttackPlayer();
 
         //If player is in a tile the enemy can attack in,
         if(attackThisTurn) {
@@ -70,9 +71,7 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else { //Player is in the current enemy's wantedPosition,
-            //Attack, don't move
-            //print("Enemy Attacked Up");
-            attackThisTurn = true;
+            illegalMoves.Add("Up");
         }
 
         //UpRight
@@ -87,9 +86,7 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            //Attack, don't move
-            //print("Enemy Attacked UpRight");
-            attackThisTurn = true;
+            illegalMoves.Add("UpRight");
         }
 
         //Right
@@ -104,9 +101,7 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            //Attack, don't move
-            //print("Enemy Attacked Right");
-            attackThisTurn = true;
+            illegalMoves.Add("Right");
         }
 
         //DownRight
@@ -121,9 +116,7 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            //Attack, don't move
-            //print("Enemy Attacked DownRight");
-            attackThisTurn = true;
+            illegalMoves.Add("DownRight");
         }
 
         //Down
@@ -138,9 +131,7 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            //Attack, don't move
-            //print("Enemy Attacked Down");
-            attackThisTurn = true;
+            illegalMoves.Add("Down");
         }
 
         //DownLeft
@@ -155,9 +146,7 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            //Attack, don't move
-            //print("Enemy Attacked DownLeft");
-            attackThisTurn = true;
+            illegalMoves.Add("DownLeft");
         }
 
         //Left
@@ -172,9 +161,7 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            //Attack, don't move
-            //print("Enemy Attacked Left");
-            attackThisTurn = true;
+            illegalMoves.Add("Left");
         }
 
         //UpLeft
@@ -189,9 +176,17 @@ public class EnemyMovement : MonoBehaviour {
                 }
             }
         } else {
-            //Attack, don't move
-            //print("Enemy Attacked UpLeft");
-            attackThisTurn = true;
+            illegalMoves.Add("UpLeft");
+        }
+
+
+        //Final Check for Top-Left tile (It is a very gross tile, never want to move there.
+        if(currentTileNumber - xTilesAmount == 1) {
+            illegalMoves.Add("Up");
+        } else if(currentTileNumber - (xTilesAmount - 1) == 1) {
+            illegalMoves.Add("UpLeft");
+        } else if (currentTileNumber - 1 == 1) {
+            illegalMoves.Add("Left");
         }
     }
 
@@ -280,6 +275,11 @@ public class EnemyMovement : MonoBehaviour {
 
         //If the acceptableMoves list had at least 1 item (direction) in it, it chose a random direction from thelist to move in,
         if(moveDirection != "") {
+            //Clear the previous attackeable tiles if they were visible.
+            if(gameObject.GetComponent<EnemyAttack>().tilesShown) {
+                gameObject.GetComponent<EnemyAttack>().EnemyRemoveAttackableTiles();
+            }
+
             //So move in that direction.
             Move(moveDirection);
         }

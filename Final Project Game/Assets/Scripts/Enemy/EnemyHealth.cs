@@ -46,14 +46,15 @@ public class EnemyHealth : MonoBehaviour {
             //Add health to the player.
             player.health.UpdateHealth(5);
 
+            enemy.currentlySelectedEnemy.GetComponent<EnemyAttack>().EnemyRemoveAttackableTiles();
+            enemy.currentSelectedEnemyIsDead = true;
+
             //Find the now-dead enemy from the list of enemies and remove it.
             for(int i = 0; i < turnHandler.enemyList.Count; ++i) {
                 if(gameObject.GetComponent<EnemyMovement>().currentTileNumber == turnHandler.enemyList[i].GetComponent<EnemyMovement>().currentTileNumber) {
                     turnHandler.enemyList.Remove(turnHandler.enemyList[i]);
                 }
             }
-
-            enemy.attack.EnemyRemoveAttackableTiles();
 
             //Destory the enemy.
             Destroy(gameObject);

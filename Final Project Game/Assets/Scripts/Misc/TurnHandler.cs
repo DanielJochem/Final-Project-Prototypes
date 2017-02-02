@@ -16,7 +16,7 @@ public class TurnHandler : MonoBehaviour {
     public GameObject wonGameUI, lostGameUI;
 
     [HideInInspector]
-    public bool levelSet, playerAttackInsteadOfMove;
+    public bool levelSet, playerAttackInsteadOfMove, gameRestarted;
 
     [HideInInspector]
     public List<GameObject> enemyList;
@@ -30,12 +30,14 @@ public class TurnHandler : MonoBehaviour {
         if(levelSet) {
             //If there has been an enemy targeted because the Player's mode this turn is set to Attack, not Move,
             if(playerAttackInsteadOfMove) {
-                player.Attack(enemyToAttack);
+                //Not needed anymore, but keep for now, just in case.
+                //player.Attack(enemyToAttack);
 
                 //If the attack killed the last enemy,
                 if(enemyList.Count == 0) {
                     //You won this room! Congrats!
                     wonGameUI.SetActive(true);
+                    gameRestarted = true;
                 }
 
             } else { //There was no enemy on the wantedTile, so the Player is in Move mode, not Attack mode, so move.
@@ -56,6 +58,15 @@ public class TurnHandler : MonoBehaviour {
         //Exit the game if you press the Escape key or the back button on an Android device.
         if(Input.GetKeyDown(KeyCode.Escape)) {
             QuitGame();
+        }
+    }
+
+
+    public void TilesBackToPurple() {
+        foreach(GameObject tile in tilePlacer.tiles) {
+            if(tile.GetComponent<SpriteRenderer>().color == Color.red) {
+                tile.GetComponent<SpriteRenderer>().color = new Color(0.5568f, 0.0156f, 0.8902f);
+            }
         }
     }
 

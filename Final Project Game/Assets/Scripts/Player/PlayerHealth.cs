@@ -37,6 +37,9 @@ public class PlayerHealth : MonoBehaviour {
         if(health == 0) {
             healthBar.value = 0;
 
+            //Tried to fix the "InvalidOperationException: Collection was modified" error, failed, it has been added to the Backlog on Hack n Plan.
+            //turnHandler.levelSet = false;
+
             //Destory every enemy on the board
             for(int i = 0; i < turnHandler.enemyList.Count; ++i) {
                 Destroy(turnHandler.enemyList[i].gameObject);
@@ -47,6 +50,8 @@ public class PlayerHealth : MonoBehaviour {
 
             //You lost, display the loser screen.
             turnHandler.lostGameUI.SetActive(true);
+            turnHandler.gameRestarted = true;
+            turnHandler.TilesBackToPurple();
 
         } else {//Player is not dead yet, update health bar.
             healthBar.value = health;

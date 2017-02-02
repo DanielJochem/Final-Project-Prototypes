@@ -2,33 +2,88 @@
 
 public class Tile : MonoBehaviour {
     private Player player;
+    private Enemy enemyRef;
     private TurnHandler turnHandler;
 
-    private GameObject currentlySelectedEnemy;
-
     //What number am I in the tileList?
-	public int listNum;
+    public int listNum;
+
+    private bool activeTimer;
+    public float timer;
+    private float timerSAVED;
 
 
     void Start() {
         player = FindObjectOfType<Player>();
         turnHandler = FindObjectOfType<TurnHandler>();
+        enemyRef = FindObjectOfType<Enemy>();
+
+        timerSAVED = timer;
     }
 
 
-    //If an enemy was clicked on to see it's attackable tiles, show those tiles.
+    private void Update() {
+        if(enemyRef.enemySwapped) {
+            timer = timerSAVED;
+            activeTimer = true;
+            enemyRef.enemySwapped = false;
+        }
+
+        if(activeTimer) {
+            timer -= Time.deltaTime;
+            if(enemyRef.currentSelectedEnemyIsDead || turnHandler.gameRestarted) {
+                timer = 0.0f;
+                activeTimer = false;
+                enemyRef.currentSelectedEnemyIsDead = false;
+                turnHandler.gameRestarted = false;
+            }
+
+            //Second check for activeTimer because of the above if statement, if died.
+            if(timer <= 0.0f && activeTimer) {
+                enemyRef.currentlySelectedEnemy.gameObject.GetComponent<EnemyAttack>().EnemyRemoveAttackableTiles();
+                enemyRef.currentlySelectedEnemy = null;
+                activeTimer = false;
+            }
+        }
+    }
+
+
+    //If an enemy was clicked on to see it's attackable tiles, show those tiles, if the same enemy is clicked again, attack if in range.
     public void OnMouseDown() {
         foreach(GameObject enemy in turnHandler.enemyList) {
             if(enemy.GetComponent<EnemyMovement>().currentTileNumber == listNum) {
-                currentlySelectedEnemy = enemy;
+                if(enemyRef.currentlySelectedEnemy != null) {
+                    //If it is the same enemy as the currentlySelectedEnemy
+                    if(enemy.GetComponent<EnemyMovement>().currentTileNumber == enemyRef.currentlySelectedEnemy.GetComponent<EnemyMovement>().currentTileNumber) {
+                        //Attack
+                        player.Attack(enemyRef.currentlySelectedEnemy);
+                        break;
+                    } else {
+                        //A new enemy has been selected, so remove the previously selected enemy's attackable tiles.
+                        enemyRef.currentlySelectedEnemy.GetComponent<EnemyAttack>().EnemyRemoveAttackableTiles();
+                    }
+                }
+
+                //Need to test if these two lines are still needed.
+                timer = timerSAVED;
+                activeTimer = false;
+
+                //Set the new enemy as the currentlySelectedEnemy and display it's tiles.
+                enemyRef.currentlySelectedEnemy = enemy;
                 enemy.GetComponent<EnemyAttack>().EnemyDisplayAttackableTiles();
+
+                enemyRef.enemySwapped = true;
+
+                //Reset the currentlySelectedEnemy timer.
+                timer = timerSAVED;
+                break;
             }
         }
     }
 
 
     //When tile is clicked on,
-	public void OnMouseUp() {
+    public void OnMouseUp() {
         //Make sure we can't click ANY enemy on the board to attack (this long IF statement will only allow for closest tile in all 8 directions). Need to change for longer range attacks.
         if((player.movement.currentTileNumber - player.movement.xTilesAmount) == listNum                //Up
             || (player.movement.currentTileNumber - (player.movement.xTilesAmount - 1)) == listNum      //UpRight
@@ -56,11 +111,5 @@ public class Tile : MonoBehaviour {
                 player.movement.wantedTileNumber = listNum;
             }
         }
-
-        //De-Red-ify tiles if an enemy was clicked.
-        if(currentlySelectedEnemy != null) {
-            currentlySelectedEnemy.GetComponent<EnemyAttack>().EnemyRemoveAttackableTiles();
-            currentlySelectedEnemy = null;
-        }
-	}
+    }
 }
