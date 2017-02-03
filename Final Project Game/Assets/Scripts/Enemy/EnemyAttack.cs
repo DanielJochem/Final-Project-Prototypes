@@ -42,6 +42,8 @@ public class EnemyAttack : MonoBehaviour {
     public bool CheckCanAttackPlayer() {
         foreach(GameObject attackableTile in enemyAttackableTiles) {
             if(player.movement.currentTileNumber == attackableTile.GetComponent<Tile>().listNum) {
+                //If the player moves into a tile the enemy can attack on, disable showing which tiles the enmy can attack on if they were shown prior to the player moving.
+                //EnemyRemoveAttackableTiles(); <<-------------------------------------------------------------------------------------------------------------------------------------------------------
                 return true;
             }
         }
@@ -50,7 +52,7 @@ public class EnemyAttack : MonoBehaviour {
 
 
     //This is fired when it is detected that the player is in a tile that the enemy can attack in.
-    public void EnemyAttackLogic() {
+    public void EnemyAttackLogic() {    
         player.health.UpdateHealth(-player.health.looseHealthAmount);
     }
 

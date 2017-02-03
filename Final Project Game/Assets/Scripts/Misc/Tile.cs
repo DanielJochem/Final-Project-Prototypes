@@ -23,6 +23,7 @@ public class Tile : MonoBehaviour {
 
 
     private void Update() {
+        //If the selected enemy (for displaying their attackable tiles) has changed
         if(enemyRef.enemySwapped) {
             timer = timerSAVED;
             activeTimer = true;
@@ -55,8 +56,7 @@ public class Tile : MonoBehaviour {
                 if(enemyRef.currentlySelectedEnemy != null) {
                     //If it is the same enemy as the currentlySelectedEnemy
                     if(enemy.GetComponent<EnemyMovement>().currentTileNumber == enemyRef.currentlySelectedEnemy.GetComponent<EnemyMovement>().currentTileNumber) {
-                        //Attack
-                        player.Attack(enemyRef.currentlySelectedEnemy);
+                        AttackEnemy();
                         break;
                     } else {
                         //A new enemy has been selected, so remove the previously selected enemy's attackable tiles.
@@ -78,12 +78,24 @@ public class Tile : MonoBehaviour {
                 timer = timerSAVED;
                 break;
             }
-        }
+        } 
     }
 
 
     //When tile is clicked on,
     public void OnMouseUp() {
+        //If there was no enemy on the clicked tile,
+        if(!turnHandler.playerAttackInsteadOfMove) {
+            if(player.movement.direction == "") {
+                //Debug.Log("I am List Number: " + listNum + ". My Position is: " + gameObject.transform.GetChild(0).GetChild(0).transform.position);
+                //Set the clicked tile as the wantedTile.
+                player.movement.wantedTileNumber = listNum;
+            }
+        }
+    }
+
+
+    public void AttackEnemy() {
         //Make sure we can't click ANY enemy on the board to attack (this long IF statement will only allow for closest tile in all 8 directions). Need to change for longer range attacks.
         if((player.movement.currentTileNumber - player.movement.xTilesAmount) == listNum                //Up
             || (player.movement.currentTileNumber - (player.movement.xTilesAmount - 1)) == listNum      //UpRight
@@ -103,13 +115,7 @@ public class Tile : MonoBehaviour {
             }
         }
 
-        //If there was no enemy on the clicked tile,
-        if(!turnHandler.playerAttackInsteadOfMove) {
-            if(player.movement.direction == "") {
-                //Debug.Log("I am List Number: " + listNum + ". My Position is: " + gameObject.transform.GetChild(0).GetChild(0).transform.position);
-                //Set the clicked tile as the wantedTile.
-                player.movement.wantedTileNumber = listNum;
-            }
-        }
+        //Attack
+        player.Attack(enemyRef.currentlySelectedEnemy);
     }
 }

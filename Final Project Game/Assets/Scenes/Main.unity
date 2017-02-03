@@ -745,6 +745,7 @@ MonoBehaviour:
   lostGameUI: {fileID: 1302518670}
   levelSet: 0
   playerAttackInsteadOfMove: 0
+  gameRestarted: 0
   enemyList: []
   enemyToAttack: {fileID: 0}
 --- !u!1001 &561704966
@@ -929,7 +930,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 677105338}
-  - component: {fileID: 677105336}
   - component: {fileID: 677105337}
   m_Layer: 0
   m_Name: ENEMY REFERENCE HOLDER
@@ -938,22 +938,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &677105336
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 677105335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb854dd12d044c245802be10823e24ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentTileNumber: 0
-  xTilesAmount: 0
-  yTilesAmount: 0
-  enemyAttackablePositions: []
-  enemyAttackableTiles: []
 --- !u!114 &677105337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -971,6 +955,9 @@ MonoBehaviour:
   gridOfTiles: []
   xTilesAmount: 0
   yTilesAmount: 0
+  currentlySelectedEnemy: {fileID: 0}
+  enemySwapped: 0
+  currentSelectedEnemyIsDead: 0
 --- !u!4 &677105338
 Transform:
   m_ObjectHideFlags: 0

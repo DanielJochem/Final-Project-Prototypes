@@ -33,7 +33,7 @@ public class EnemyMovement : MonoBehaviour {
     }
 
 
-    public void EnemyMovementLogic() {
+    public void EnemyTurnLogic() {
         //Check for the player's and all other enemy's current tile. This prevents enemies stacking on top of each other and/or the player.
         PlayerAndEnemyLocationChecker();
         attackThisTurn = gameObject.GetComponent<EnemyAttack>().CheckCanAttackPlayer();
