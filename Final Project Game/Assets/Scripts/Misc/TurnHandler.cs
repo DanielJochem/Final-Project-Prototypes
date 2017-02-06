@@ -15,7 +15,7 @@ public class TurnHandler : MonoBehaviour {
 
     public GameObject wonGameUI, lostGameUI;
 
-    //[HideInInspector]
+    [HideInInspector]
     public bool levelSet, playerAttackInsteadOfMove, gameRestarted, movementInProgress, wasEnemyOnTile;
 
     [HideInInspector]
