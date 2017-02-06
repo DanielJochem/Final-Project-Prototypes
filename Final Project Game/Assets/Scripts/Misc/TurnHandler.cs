@@ -15,8 +15,8 @@ public class TurnHandler : MonoBehaviour {
 
     public GameObject wonGameUI, lostGameUI;
 
-    [HideInInspector]
-    public bool levelSet, playerAttackInsteadOfMove, gameRestarted;
+    //[HideInInspector]
+    public bool levelSet, playerAttackInsteadOfMove, gameRestarted, movementInProgress, wasEnemyOnTile;
 
     [HideInInspector]
     public List<GameObject> enemyList;
@@ -28,25 +28,17 @@ public class TurnHandler : MonoBehaviour {
     void Update() {
         //If all tiles have been placed, Player has been placed, and all enemies have been placed,
         if(levelSet) {
-            //If there has been an enemy targeted because the Player's mode this turn is set to Attack, not Move,
-            if(playerAttackInsteadOfMove) {
-                //Not needed anymore, but keep for now, just in case.
-                //player.Attack(enemyToAttack);
-
-                //If the attack killed the last enemy,
-                if(enemyList.Count == 0) {
-                    //You won this room! Congrats!
-                    wonGameUI.SetActive(true);
-                    gameRestarted = true;
-                }
-
-            } else { //There was no enemy on the wantedTile, so the Player is in Move mode, not Attack mode, so move.
+            //If there was no enemy on the tile clicked on, we want to move, not attack.
+            if(!playerAttackInsteadOfMove && player.movement.wantedTileNumber != -1 && !movementInProgress && !wasEnemyOnTile) {
+                //The four references to this 'movementInProgress' thing in this script (it is the only script that has it) is to limit the amount of times player.Movement() is tried.
+                movementInProgress = true;
                 player.Movement();
+                movementInProgress = false;
             }
 
             //Turn logic for enemies.
             if(turnNumber > turnNumberSAVED && enemyList.Count > 0) {
-                foreach(GameObject enemy in enemyList) { 
+                foreach(GameObject enemy in enemyList) {
                     enemy.GetComponent<EnemyMovement>().EnemyTurnLogic();
                 }
 

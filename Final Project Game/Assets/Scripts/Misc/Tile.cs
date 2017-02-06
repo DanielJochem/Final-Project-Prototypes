@@ -51,8 +51,10 @@ public class Tile : MonoBehaviour {
 
     //If an enemy was clicked on to see it's attackable tiles, show those tiles, if the same enemy is clicked again, attack if in range.
     public void OnMouseDown() {
+        turnHandler.wasEnemyOnTile = false;
         foreach(GameObject enemy in turnHandler.enemyList) {
             if(enemy.GetComponent<EnemyMovement>().currentTileNumber == listNum) {
+                turnHandler.wasEnemyOnTile = true;
                 if(enemyRef.currentlySelectedEnemy != null) {
                     //If it is the same enemy as the currentlySelectedEnemy
                     if(enemy.GetComponent<EnemyMovement>().currentTileNumber == enemyRef.currentlySelectedEnemy.GetComponent<EnemyMovement>().currentTileNumber) {
@@ -85,12 +87,15 @@ public class Tile : MonoBehaviour {
     //When tile is clicked on,
     public void OnMouseUp() {
         //If there was no enemy on the clicked tile,
-        if(!turnHandler.playerAttackInsteadOfMove) {
+        if(!turnHandler.playerAttackInsteadOfMove && !turnHandler.wasEnemyOnTile) {
             if(player.movement.direction == "") {
                 //Debug.Log("I am List Number: " + listNum + ". My Position is: " + gameObject.transform.GetChild(0).GetChild(0).transform.position);
                 //Set the clicked tile as the wantedTile.
                 player.movement.wantedTileNumber = listNum;
             }
+        } else {
+            //Some cleanup
+            turnHandler.wasEnemyOnTile = false;
         }
     }
 
@@ -111,11 +116,12 @@ public class Tile : MonoBehaviour {
                 if(enemy.GetComponent<EnemyMovement>().currentTileNumber == listNum) {
                     turnHandler.enemyToAttack = enemy;
                     turnHandler.playerAttackInsteadOfMove = true;
+                    break;
                 }
             }
-        }
 
-        //Attack
-        player.Attack(enemyRef.currentlySelectedEnemy);
+            //Attack
+            player.Attack(enemyRef.currentlySelectedEnemy);
+        }
     }
 }

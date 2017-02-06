@@ -18,8 +18,8 @@ public class Player : MonoBehaviour {
 
     public void Attack(GameObject enemyToAttack) {
         attack.PlayerAttackLogic(enemyToAttack);
+
         //In case the Player chose to attack instead of move, set it back to the default of moving next turn.
         turnHandler.playerAttackInsteadOfMove = false;
-        turnHandler.turnNumber++;
     }
 }
